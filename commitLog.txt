@@ -1,0 +1,13 @@
+1- Added support for cloning dots and beams in VexFlowExtension.clone;
+
+2- Changed Stave.replaceNote to replace the note in the beams in VexFlowExtension.replaceNote.
+
+3- Changed the draw() function in the Handler to manually format and draw notes, instead of FormatAndDraw helper function.
+
+4- Added previous loading of buttons image to avoid rendering of the NoteMenu without the buttons.
+
+5- Changed the addAccidental and addDot functions in the handler to receive the note as argument instead of using always the current note.
+
+6- Updated the Dots error message with new information discovered.
+
+7- Changed vexflow-min.js to make it stop shifting the dot when over a line to stop the dots error.
