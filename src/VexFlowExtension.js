@@ -81,6 +81,37 @@ Vex.Flow.StaveNote.prototype.indexOfKey = function(keyName){
 	return this.keys.indexOf(keyName);
 };
 
+/**
+ * This method is used to play the composed song.
+ * THIS METHOD REQUIRES MIDI.JS to WORK!
+ * @param playInfo
+ */
+Vex.Flow.StaveNote.prototype.getMIDIPlayScript = function(playInfo){
+	//Prepare the notes to be sent
+	var notes = [];
+	
+	for(var i = 0; i < this.keys.length; i++){
+		notes.push(MIDI.keyToNote[this.keys[i].replace('/','')]);
+	}
+	
+
+	//velocity is set as 127
+	
+	var keyPressTime = playInfo.defaultTime / this.duration;
+	var script = ""
+		+ notes.length==1?"MIDI.noteOn(0, "+ notes[0] +", 127, " + playInfo.delay + ");"+
+				"MIDI.noteOff(0, "+ notes[0] +", " + (parseFloat(playInfo.delay) + keyPressTime) + ");"
+				:"MIDI.chordOn(0," + notes + ", 127," + playInfo.delay+ ");" +
+				"MIDI.chordOff(0," + notes + ", " + (parseFloat(playInfo.delay) + keyPressTime) + ");";
+	
+				
+				
+	//increment the delay 
+	playInfo.delay = playInfo.delay + keyPressTime;
+	
+	return script;
+};
+
 
 //TODO Clone Ties
 Vex.Flow.StaveNote.prototype.clone = function(newProps){

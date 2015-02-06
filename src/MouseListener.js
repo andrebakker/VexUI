@@ -180,7 +180,7 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 			var nextNote = getLastNoteBeforeXPosition(this.handler.currentStave, mousePos.x);
 			
 			//The provisory Note is now added in the stave list
-			var newNote = this.handler.provisoryNote.clone({color: Vex.DefaultColor});
+			var newNote = this.handler.provisoryNote.clone();
 			//Add the note into the stave
 			this.handler.currentStave.insertNoteBefore(newNote, nextNote);
 			

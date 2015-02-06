@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<!-- Support Scripts -->
+<script type="text/javascript" src="./lib/vexflow-min.js"></script>
+<script type="text/javascript" src="./lib/jquery-2.0.0.js"></script>
+<script type="text/javascript" src="./lib/MIDI.min.js"></script>
+<script type="text/javascript" src="./lib/Base64.js"></script>
+<script type="text/javascript" src="./lib/base64binary.js"></script>
+
+<!-- UI scripts -->
+<script type="text/javascript" src="./src/UI.js"></script>
+<script type="text/javascript" src="./src/Util.js"></script>
+<script type="text/javascript" src="./src/Handler.js"></script>
+<script type="text/javascript" src="./src/MouseListener.js"></script>
+<script type="text/javascript" src="./src/NoteMap.js"></script>
+<script type="text/javascript" src="./src/VexFlowExtension.js"></script>
+<script type="text/javascript" src="./src/KeyboardKey.js"></script>
+<script type="text/javascript" src="./src/KeyboardListener.js"></script>
+<script type="text/javascript" src="./src/NoteMenu.js"></script>
+<script type="text/javascript" src="./src/Button.js"></script>
+<script type="text/javascript" src="./src/NoteMenuButtonRenderer.js"></script>
+<script type="text/javascript" src="./src/TipRenderer.js"></script>
+
+ <style type="text/css">
+    canvas {
+      background: #eed;
+      padding: 10px;
+      border: 10px solid #ddc;
+      position: relative;
+    }
+  </style>
+
+<title>VexUI Tester</title>
+</head>
+<body>
+
+	 <canvas id="canvas" width="625" height="160" tabindex="1"></canvas>
+	 <input type="button" value="play" onclick="handler.play();" />
+	 
+	 <script type="text/javascript">
+	 //Disabling the context menu for canvas
+	 
+	 	$('body').on('contextmenu', 'canvas', function(e){return false; });
+	 
+	// Get the rendering context
+	
+			var canvas = $('#canvas')[0];
+
+			var renderer = new Vex.Flow.Renderer(canvas,
+					Vex.Flow.Renderer.Backends.CANVAS);
+
+			var ctx = renderer.getContext();
+			
+			var staves = [ new Vex.Flow.Stave(10, 0, 600) ];
+
+			var stave = staves[0];
+			stave.addClef("treble").setContext(ctx).draw();
+
+			// Create the notes
+			var notes = [ ];
+			stave.setNotes(notes);
+
+			//stave.modifiers.push(new Vex.Flow.Barline(Vex.Flow.Barline.type.SINGLE, stave.x + 50));
+			
+			// Helper function to justify and draw a 4/4 voice
+			Vex.Flow.Formatter.FormatAndDraw(ctx, stave, notes);
+
+			//INIT The UI
+			var handler = new Vex.UI.Handler(renderer, canvas, staves);
+			handler.init();
+		</script>
+</body>
+</html>
