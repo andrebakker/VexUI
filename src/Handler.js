@@ -29,15 +29,9 @@ Vex.UI.Handler = function (renderer, canvas, staveList){
 	this.tipRenderer = new Vex.UI.TipRenderer(this.canvas);
 	this.tipRenderer.init();
 	
+	this.player = new Vex.UI.Player(this, this.staveList);
 	
-	//Initialize the player
-	MIDI.loadPlugin({
-		soundfontUrl: "./soundfont/",
-		instrument: "acoustic_grand_piano",
-		callback: function() {
-			alert("ready to rock!");
-		}
-	});
+	
 	
 	
 };
@@ -213,13 +207,13 @@ Vex.UI.Handler.prototype.play = function(){
 			rpm: rpm,
 			defaultTime : (rpm / 60) // to seconds
 			};
-	var script = "MIDI.setVolume(0, 127);";
+	//var script = "MIDI.setVolume(0, 127);";
 	for(var i = 0; i < this.staveList.length; i++){
 		var notes = this.staveList[i].getNotes();
 		for(var j = 0; j < notes.length; j++){
-			script += notes[j].getMIDIPlayScript(playInfo);
+			this.player.addEvents(notes[j].getPlayEvents(playInfo));
 		}		
 	}
 	
-	eval(script);
+	this.player.play();
 }

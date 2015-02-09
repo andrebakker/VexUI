@@ -81,35 +81,44 @@ Vex.Flow.StaveNote.prototype.indexOfKey = function(keyName){
 	return this.keys.indexOf(keyName);
 };
 
-/**
- * This method is used to play the composed song.
- * THIS METHOD REQUIRES MIDI.JS to WORK!
- * @param playInfo
- */
-Vex.Flow.StaveNote.prototype.getMIDIPlayScript = function(playInfo){
+
+Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){
 	//Prepare the notes to be sent
 	var notes = [];
 	
 	for(var i = 0; i < this.keys.length; i++){
 		notes.push(MIDI.keyToNote[this.keys[i].replace('/','')]);
 	}
-	
-
-	//velocity is set as 127
+	//	velocity is set as 127
 	
 	var keyPressTime = playInfo.defaultTime / this.duration;
-	var script = ""
-		+ notes.length==1?"MIDI.noteOn(0, "+ notes[0] +", 127, " + playInfo.delay + ");"+
-				"MIDI.noteOff(0, "+ notes[0] +", " + (parseFloat(playInfo.delay) + keyPressTime) + ");"
-				:"MIDI.chordOn(0," + notes + ", 127," + playInfo.delay+ ");" +
-				"MIDI.chordOff(0," + notes + ", " + (parseFloat(playInfo.delay) + keyPressTime) + ");";
 	
-				
-				
+	var events = [];
+	for ( var i = 0; i < notes.length; i++) {
+		//For each note, we generate a noteOn and a noteOff event
+		events.push({
+			type: 'channel',
+			channel: 0,
+			subtype: 'noteOn',
+			noteNumber: notes[i],
+			velocity: 127,
+			queuedTime: playInfo.delay,
+			note: this
+		});
+		events.push({
+			type: 'channel',
+			channel: 0,
+			subtype: 'noteOff',
+			noteNumber: notes[i],
+			queuedTime: playInfo.delay + keyPressTime,
+			note: this
+		});
+	}
+	
 	//increment the delay 
 	playInfo.delay = playInfo.delay + keyPressTime;
 	
-	return script;
+	return events;
 };
 
 
