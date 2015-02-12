@@ -48,7 +48,7 @@ Vex.UI.MouseListener.prototype.init = function(){
 Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 	evt.preventDefault();
 	switch(evt.type) {
-		case "click":
+		case "mouseup":
 			this.handleMouseClick(evt);
 			break;
 		case "mousemove":
@@ -64,14 +64,14 @@ Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 };
 
 Vex.UI.MouseListener.prototype.startListening = function(){
-	this.canvas.addEventListener('click', this, false);
+	this.canvas.addEventListener('mouseup', this, false);
 	this.canvas.addEventListener('mousemove', this, false);
 	this.canvas.addEventListener('wheel', this, false);
 	this.canvas.addEventListener('contextmenu', this, false);
 };
 
 Vex.UI.MouseListener.prototype.stopListening = function(){
-	this.canvas.removeEventListener('click', this, false);
+	this.canvas.removeEventListener('mouseup', this, false);
 	this.canvas.removeEventListener('mousemove', this, false);
 	this.canvas.removeEventListener('wheel', this, false);
 	this.canvas.removeEventListener('contextmenu', this, false);
@@ -127,7 +127,8 @@ Vex.UI.MouseListener.prototype.handleMouseClick = function(evt){
     	this.handleMiddleMouseClick(evt);
         break;
     case 3:
-        alert('Right Mouse button pressed.');
+    	//Event being handled by contextMenu
+    	//this.handleRightMouseClick(evt);
         break;
     default:
         alert('You have a strange Mouse!');

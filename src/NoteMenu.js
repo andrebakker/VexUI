@@ -42,8 +42,9 @@ Vex.UI.NoteMenu.prototype.open = function(mousePos){
 	this.buttonRenderer = new Vex.UI.NoteMenuButtonRenderer(this.panelProps, this.ctx);
 	//this.buttonRenderer.menuButtonsImg.onload = ;
 	this.drawButtons();
-	this.canvas.addEventListener('click', this, false);
+	this.canvas.addEventListener('mouseup', this, false);
 	this.canvas.addEventListener('mousemove', this, false);
+	this.canvas.addEventListener('contextmenu', this, false);
 	this.setTipArea();
 	
 };
@@ -51,16 +52,18 @@ Vex.UI.NoteMenu.prototype.open = function(mousePos){
 Vex.UI.NoteMenu.prototype.close = function(){
 	this.buttons = [];
 	this.currentButton = null;
-	this.canvas.removeEventListener('click', this, false);
+	this.canvas.removeEventListener('mouseup', this, false);
 	this.canvas.removeEventListener('mousemove', this, false);
+	this.canvas.removeEventListener('contextmenu', this, false);
 	//Notify the handler that the panel was closed, so that the usual behavior can resume
 	this.handler.noteMenuClosed();
 };
 
 
 Vex.UI.NoteMenu.prototype.handleEvent = function(evt){
+	evt.preventDefault();
 	switch(evt.type) {
-		case "click":
+		case "mouseup":
 			this.handleMouseClick(evt);
 			break;
 		case "mousemove":
@@ -166,20 +169,22 @@ Vex.UI.NoteMenu.prototype.drawButtons = function(){
 
 
 Vex.UI.NoteMenu.prototype.handleMouseClick = function(evt){
-	//get mouse position
-	var mousePos = getMousePositionInCanvas(this.canvas, evt);
-	
-	//if clicked in one of the buttons, then call the action for that button
-	for(var i = 0; i<this.buttons.length; i++){
-		var button = this.buttons[i];
-		if(isCursorWithinRectangle(button.props.x, button.props.y, button.props.width, button.props.height, mousePos.x, mousePos.y)){
-			//call button action.
+	if(evt.which == 1){//Left Button
+		//get mouse position
+		var mousePos = getMousePositionInCanvas(this.canvas, evt);
+		
+		//if clicked in one of the buttons, then call the action for that button
+		for(var i = 0; i<this.buttons.length; i++){
+			var button = this.buttons[i];
+			if(isCursorWithinRectangle(button.props.x, button.props.y, button.props.width, button.props.height, mousePos.x, mousePos.y)){
+				//call button action.
 
-			button.callAction(this);
+				button.callAction(this);
 
-			
-			break;
-		}
+				
+				break;
+			}
+		}		
 	}
 };
 
