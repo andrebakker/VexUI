@@ -46,6 +46,7 @@ Vex.UI.MouseListener.prototype.init = function(){
 };
 
 Vex.UI.MouseListener.prototype.handleEvent = function(evt){
+	evt.preventDefault();
 	switch(evt.type) {
 		case "click":
 			this.handleMouseClick(evt);
@@ -56,6 +57,9 @@ Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 		case "wheel":
 			this.handleMouseWheel(evt);
 			break;
+		case "contextmenu":
+			this.handleRightMouseClick(evt);
+			break;
 	}
 };
 
@@ -63,12 +67,14 @@ Vex.UI.MouseListener.prototype.startListening = function(){
 	this.canvas.addEventListener('click', this, false);
 	this.canvas.addEventListener('mousemove', this, false);
 	this.canvas.addEventListener('wheel', this, false);
+	this.canvas.addEventListener('contextmenu', this, false);
 };
 
 Vex.UI.MouseListener.prototype.stopListening = function(){
 	this.canvas.removeEventListener('click', this, false);
 	this.canvas.removeEventListener('mousemove', this, false);
 	this.canvas.removeEventListener('wheel', this, false);
+	this.canvas.removeEventListener('contextmenu', this, false);
 };
 
 Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
@@ -206,12 +212,11 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 				//Redraw the stave
 				this.handler.redraw();
 
-			}else{
+			}/*else{
+				//no actions to be done here, since we passed the menu to the right click 
 				//Case 2.2: Clicked a Key the current note already has
-				//We should render a toolbox for modifying current key.
-				this.handler.openMenuForKey(clickedKeyName, mousePos);
-				
-			}
+
+			}*/
 		}
 		
 		
@@ -219,5 +224,19 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 };
 
 Vex.UI.MouseListener.prototype.handleMiddleMouseClick = function(evt){
-	alert("middle button pressed");
+	console.log("middle button pressed");
+};
+
+
+Vex.UI.MouseListener.prototype.handleRightMouseClick = function(evt){
+	if(this.handler.currentStave!=null){
+		//Find out the note representing the place clicked by the user
+		if(this.handler.currentNote!=null){
+			var mousePos = getMousePositionInCanvas(this.canvas, evt);
+			var clickedKeyName = NoteMap.getNoteName(this.handler.currentStave, mousePos);
+				
+			//We should render a toolbox for modifying current key.
+			this.handler.openMenuForKey(clickedKeyName, mousePos);
+		}
+	}
 };
