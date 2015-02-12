@@ -167,7 +167,7 @@ Vex.UI.Handler.prototype.noteMenuClosed = function(){
 };
 
 Vex.UI.Handler.prototype.addAccidentalToNote = function(name, note, index){
-	if(index === undefined)
+	if(index === undefined || index == -1)
 		index = 0;
 	
 	var accidental = new Vex.Flow.Accidental(name);
