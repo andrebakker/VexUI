@@ -53,7 +53,7 @@ Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 		case "mousemove":
 			this.handleMouseOver(evt);
 			break;
-		case "mousewheel":
+		case "wheel":
 			this.handleMouseWheel(evt);
 			break;
 	}
@@ -62,13 +62,13 @@ Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 Vex.UI.MouseListener.prototype.startListening = function(){
 	this.canvas.addEventListener('click', this, false);
 	this.canvas.addEventListener('mousemove', this, false);
-	this.canvas.addEventListener('mousewheel', this, false);
+	this.canvas.addEventListener('wheel', this, false);
 };
 
 Vex.UI.MouseListener.prototype.stopListening = function(){
 	this.canvas.removeEventListener('click', this, false);
 	this.canvas.removeEventListener('mousemove', this, false);
-	this.canvas.removeEventListener('mousewheel', this, false);
+	this.canvas.removeEventListener('wheel', this, false);
 };
 
 Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
@@ -113,7 +113,7 @@ Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 
 
 Vex.UI.MouseListener.prototype.handleMouseClick = function(evt){
-	switch (event.which) {
+	switch (evt.which) {
     case 1:
         this.handleLeftMouseClick(evt);
         break;
@@ -131,7 +131,7 @@ Vex.UI.MouseListener.prototype.handleMouseClick = function(evt){
 };
 
 Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
-	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
+	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || evt.deltaY)));
 	if(this.handler.currentNote!=null){
 		var dur = this.handler.currentNote.duration;
 		var isAlias = Vex.Flow.durationAliases[dur] !== undefined;
