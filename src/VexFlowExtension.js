@@ -6,52 +6,74 @@
  * Vex.Flow.Stave extensions 
  */
 
-Vex.Flow.Stave.prototype.notes = [];
+Vex.Flow.Stave.prototype.tickables = [];
 
-Vex.Flow.Stave.prototype.setNotes = function(noteList) {
-	this.notes = noteList;
+Vex.Flow.Stave.prototype.setTickables = function(tickables) {
+	this.tickables = tickables;
+};
+
+Vex.Flow.Stave.prototype.getTickables = function() {
+	return this.tickables;
 };
 
 Vex.Flow.Stave.prototype.getNotes = function() {
-	return this.notes;
+	var notes = [];
+	
+	for ( var i = 0; i < this.tickables.length; i++) {
+		var tickable = this.tickables[i];
+		if(tickable instanceof Vex.Flow.StaveNote)
+			notes.push(tickable);
+	}
+	return notes;
 };
 
-Vex.Flow.Stave.prototype.insertNoteBefore = function(newNote, referenceNote) {
-	if(referenceNote==null){
-		this.pushNote(newNote);
+Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceTickable) {
+	if(referenceTickable==null){
+		this.pushTickable(newTickable);
 	}else{
-		var referenceIndex = this.notes.indexOf(referenceNote);
-		this.notes.splice(referenceIndex, 0, newNote);	
+		var referenceIndex = this.tickables.indexOf(referenceTickable);
+		this.tickables.splice(referenceIndex, 0, newTickable);	
 	}
 	
 };
 
-Vex.Flow.Stave.prototype.getPreviousNote = function(referenceNote){
-	var referenceIndex = this.notes.indexOf(referenceNote);
+Vex.Flow.Stave.prototype.getPreviousTickable = function(referenceTickable){
+	var referenceIndex = this.tickables.indexOf(referenceTickable);
 	if (referenceIndex == 0) return null;
-	return this.notes[referenceIndex-1];
+	return this.tickables[referenceIndex-1];
+};
+
+Vex.Flow.Stave.prototype.getNextTickable = function(referenceTickable){
+	var referenceIndex = this.tickables.indexOf(referenceTickable);
+	if (referenceIndex == this.tickables.length - 1) return null;
+	return this.tickables[referenceIndex+1];
 };
 
 Vex.Flow.Stave.prototype.getNextNote = function(referenceNote){
-	var referenceIndex = this.notes.indexOf(referenceNote);
-	if (referenceIndex == this.notes.length - 1) return null;
-	return this.notes[referenceIndex+1];
+	var referenceIndex = this.tickables.indexOf(referenceNote);
+	while(referenceIndex < this.tickables.length){
+		referenceIndex++;
+		if(this.tickables[referenceIndex] instanceof Vex.Flow.StaveNote)
+			return this.tickables[referenceIndex];
+	}
+		
+	return null;
 };
 
-Vex.Flow.Stave.prototype.replaceNote = function(oldNote,newNote){
+Vex.Flow.Stave.prototype.replaceTickable = function(oldTickable,newTickable){
 	//Replacing note in beam.
-	if(oldNote.beam!=null){
-		var beam = oldNote.beam;
-		var referenceIndex = beam.notes.indexOf(oldNote);
-		beam.notes[referenceIndex]=newNote;
+	if(oldTickable.beam!=null){
+		var beam = oldTickable.beam;
+		var referenceIndex = beam.tickables.indexOf(oldTickable);
+		beam.notes[referenceIndex]=newTickable;
 	}
 	
-	var referenceIndex = this.notes.indexOf(oldNote);
-	this.notes[referenceIndex]=newNote;
+	var referenceIndex = this.tickables.indexOf(oldTickable);
+	this.tickables[referenceIndex]=newTickable;
 };
 
-Vex.Flow.Stave.prototype.pushNote = function(newNote){
-	this.notes.push(newNote);
+Vex.Flow.Stave.prototype.pushTickable = function(newTickable){
+	this.tickables.push(newTickable);
 };
 
 Vex.Flow.Stave.prototype.beams = [];
@@ -94,26 +116,26 @@ Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){
 	var keyPressTime = playInfo.defaultTime / this.duration;
 	
 	var events = [];
-	for ( var i = 0; i < notes.length; i++) {
-		//For each note, we generate a noteOn and a noteOff event
-		events.push({
-			type: 'channel',
-			channel: 0,
-			subtype: 'noteOn',
-			noteNumber: notes[i],
-			velocity: 127,
-			queuedTime: playInfo.delay,
-			note: this
-		});
-		events.push({
-			type: 'channel',
-			channel: 0,
-			subtype: 'noteOff',
-			noteNumber: notes[i],
-			queuedTime: playInfo.delay + keyPressTime,
-			note: this
-		});
-	}
+	
+
+	events.push({
+		type: 'channel',
+		channel: 0,
+		subtype: notes.length==1?'noteOn':'chordOn',
+		noteNumber: notes.length==1?notes[0]:notes,
+		velocity: 127,
+		queuedTime: playInfo.delay,
+		note: this
+	});
+	events.push({
+		type: 'channel',
+		channel: 0,
+		subtype: notes.length==1?'noteOff':'chordOff',
+		noteNumber: notes.length==1?notes[0]:notes,
+		queuedTime: playInfo.delay + keyPressTime,
+		note: this
+	});
+
 	
 	//increment the delay 
 	playInfo.delay = playInfo.delay + keyPressTime;

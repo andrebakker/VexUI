@@ -75,11 +75,11 @@ Vex.UI.Handler.prototype.drawNotes = function(stave){
 	} else {
 		//Draw notes on Stave passed as Arg
 		var voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4).setMode(Vex.Flow.Voice.Mode.SOFT);
-		voice.addTickables(stave.getNotes());
-		// Format and justify the notes to 300 pixels
+		voice.addTickables(stave.getTickables());
+		
 		var formatter = new Vex.Flow.Formatter();
 		formatter.joinVoices([voice]);
-		formatter.format([voice], 300);
+		formatter.formatToStave([voice], stave);
 		voice.draw(this.ctx, stave);
 		this.drawBeams(stave);
 	}

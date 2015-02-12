@@ -59,6 +59,16 @@ Vex.UI.Player.prototype.play = function(self){
 			event.note.setHighlight(false);
 			self.handler.redraw();
 			break;
+		case 'chordOn':
+			MIDI.chordOn(event.channel, event.noteNumber, event.velocity, 0);
+			event.note.setHighlight(true);
+			self.handler.redraw();
+			break;
+		case 'chordOff':
+			MIDI.chordOff(event.channel, event.noteNumber, 0);
+			event.note.setHighlight(false);
+			self.handler.redraw();
+			break;
 		}
 		
 		//Increment the current event and add current time

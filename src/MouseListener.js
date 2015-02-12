@@ -96,7 +96,7 @@ Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 	function findWhichNoteMouseOver(currentStave, mousePos){
 		var noteList = [];
 		if(currentStave != null)
-			noteList = currentStave.getNotes();
+			noteList = currentStave.getTickables();
 		
 		for(var i = 0; i < noteList.length; i++){
 			//return to default color. Unnecessary if currentNote does not change color
@@ -145,7 +145,7 @@ Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
 		dur = "" + dur; //to string
 		var newNote = this.handler.currentNote.clone({duration: dur});
 		
-		this.handler.currentStave.replaceNote(this.handler.currentNote,newNote);
+		this.handler.currentStave.replaceTickable(this.handler.currentNote,newNote);
 		this.handler.currentNote = newNote;
 		this.handler.currentNote.setHighlight(true);
 		this.handler.redraw();
@@ -177,12 +177,12 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 			//This case inserts a note into the current stave, based on which position the user clicked
 			
 			//Find out the note immediately after the mouse X position
-			var nextNote = getLastNoteBeforeXPosition(this.handler.currentStave, mousePos.x);
+			var nextNote = getLastTickableBeforeXPosition(this.handler.currentStave, mousePos.x);
 			
 			//The provisory Note is now added in the stave list
 			var newNote = this.handler.provisoryNote.clone();
 			//Add the note into the stave
-			this.handler.currentStave.insertNoteBefore(newNote, nextNote);
+			this.handler.currentStave.insertTickableBefore(newNote, nextNote);
 			
 			//Redraw the stave
 			this.handler.redraw();
@@ -201,7 +201,7 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 				newKeys.push(clickedKeyName);
 				var oldNote = this.handler.currentNote;
 				var newNote = oldNote.clone({ keys: newKeys});
-				this.handler.currentStave.replaceNote(oldNote, newNote);
+				this.handler.currentStave.replaceTickable(oldNote, newNote);
 				this.handler.currentNote = newNote;
 				//Redraw the stave
 				this.handler.redraw();

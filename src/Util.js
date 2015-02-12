@@ -43,8 +43,8 @@ function getLastNoteUsed(stave){
 	var note = null;
 	
 	for(var i = 0;  i<stave.getNotes().length; i++ ){
-		if(x < stave.getNotes()[i].getBoundingBox().getX())
-			note = stave.getNotes()[i];
+		if(x < stave.getTickables()[i].getBoundingBox().getX())
+			note = stave.getTickables()[i];
 		if(note!=null)
 			break;
 	}
@@ -52,12 +52,12 @@ function getLastNoteUsed(stave){
 	return note;
 };
 
-function getLastNoteBeforeXPosition(stave, x){
+function getLastTickableBeforeXPosition(stave, x){
 	var note = null;
 	
-	for(var i = 0;  i<stave.getNotes().length; i++ ){
-		if(x < stave.getNotes()[i].getBoundingBox().getX())
-			note = stave.getNotes()[i];
+	for(var i = 0;  i<stave.getTickables().length; i++ ){
+		if(x < stave.getTickables()[i].getBoundingBox().getX())
+			note = stave.getTickables()[i];
 		if(note!=null)
 			break;
 	}

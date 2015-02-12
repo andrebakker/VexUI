@@ -43,8 +43,6 @@
 	 <script type="text/javascript">
 	 //Disabling the context menu for canvas
 	 
-	 	$('body').on('contextmenu', 'canvas', function(e){return false; });
-	 
 	// Get the rendering context
 	
 			var canvas = $('#canvas')[0];
@@ -61,7 +59,7 @@
 
 			// Create the notes
 			var notes = [ ];
-			stave.setNotes(notes);
+			stave.setTickables(notes);
 
 			//stave.modifiers.push(new Vex.Flow.Barline(Vex.Flow.Barline.type.SINGLE, stave.x + 50));
 			
