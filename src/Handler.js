@@ -101,7 +101,7 @@ Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 	
 	
 	if(this.currentStave!=null){
-		if(!this.provisoryTickable instanceof Vex.Flow.StaveNote || this.provisoryTickable.noteType == "r"){
+		if(!(this.provisoryTickable instanceof Vex.Flow.StaveNote) || this.provisoryTickable.noteType == "r"){
 			//No need to update key if its not a note or if its a rest, just draw the tickable in the new mouse position
 			
 		}
@@ -141,21 +141,21 @@ Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
 	
 	switch(newType){
 	case Vex.UI.TickableType.NOTE:
-		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: this.provisoryTickable.duration});
+		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4" });
 		break;
 	case Vex.UI.TickableType.REST:
-		//b/4 specifies the vertical position of the rest
 		this.provisoryTickable = new Vex.Flow.StaveNote({ keys: ["b/4"], duration: this.provisoryTickable.duration + "r" });
 		break;
 	case Vex.UI.TickableType.BAR:
-		this.provisoryTickable = new Vex.Flow.BarLine();
+		this.provisoryTickable = new Vex.Flow.BarNote();
 		break;
 	}
-	
-	this.provisoryTickable.x_shift = x_shift;
 	this.provisoryTickable.setStave(this.currentStave);
 	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
-	this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
+	if(this.provisoryTickable.setStyle !== undefined)
+		this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
+	this.provisoryTickable.x_shift = x_shift;
+	
 	this.drawProvisoryTickable();
 };
 
@@ -164,15 +164,24 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 	if(this.currentStave!=null){
 		this.redrawStave(this.currentStave);
 		if(mousePos!==undefined){
-			//Fix X position to set exactly where the mouse is
-			//TODO the -5 value shouldnt be absolute! it should reflect half the note's Width
-			this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
+			if(this.provisoryTickable instanceof Vex.Flow.StaveNote){
+				//Fix X position to set exactly where the mouse is
+				//TODO the -5 value shouldnt be absolute! it should reflect half the note's Width
+				this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
+
+
+			}else if(this.provisoryTickable instanceof Vex.Flow.BarNote){
+				this.provisoryTickable.getTickContext().setX(
+						mousePos.x 
+						- this.currentStave.getNoteStartX() 
+						- this.provisoryTickable.render_options.stave_padding
+						);
+			}
 		}
-		
 		//Only draw Provisory note if not on a definitive note
 		if(this.currentNote==null){
 			this.provisoryTickable.draw();
-		}
+		}	
 	}
 	
 	

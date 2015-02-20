@@ -106,7 +106,8 @@ Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
 		
 		for(var i = 0; i < noteList.length; i++){
 			//return to default color. Unnecessary if currentNote does not change color
-			noteList[i].setHighlight(false);
+			if(noteList[i].setHighlight !== undefined)
+				noteList[i].setHighlight(false);
 			var noteBox = noteList[i].getBoundingBox();
 			var staveBox = currentStave.getBoundingBox();
 			//Use the Notes X and the Stave's Y for the bounding box 
@@ -233,7 +234,7 @@ Vex.UI.MouseListener.prototype.handleMiddleMouseClick = function(evt){
 		if(tickable.noteType == "n")
 			newType = Vex.UI.TickableType.REST;
 		else
-			newType = Vex.UI.TickableType.NOTE; // TODO CHANGE TO BAR
+			newType = Vex.UI.TickableType.BAR;
 	} else if (tickable instanceof Vex.Flow.BarNote)
 		newType = Vex.UI.TickableType.NOTE;
 	
