@@ -149,11 +149,13 @@ Vex.Flow.StaveNote.prototype.clone = function(newProps){
 	var currentProps = {
 			keys: this.keys,
 			stem_direction: this.getStemDirection(),
-			duration: this.duration
+			duration: this.duration,
+			noteType: this.noteType
 	} ;
 	
 	
 	var mergedProps = mergeProperties(currentProps, newProps);
+	mergedProps.duration = mergedProps.duration + mergedProps.noteType;
 	
 	var newNote = new Vex.Flow.StaveNote(mergedProps);
 	

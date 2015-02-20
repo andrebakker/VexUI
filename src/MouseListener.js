@@ -225,7 +225,20 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 };
 
 Vex.UI.MouseListener.prototype.handleMiddleMouseClick = function(evt){
-	console.log("middle button pressed");
+	//Middle mouse button is responsible for changing the provisory Tickable type
+	var tickable = this.handler.provisoryTickable;
+	var newType = null;
+	
+	if(tickable instanceof Vex.Flow.StaveNote){
+		if(tickable.noteType == "n")
+			newType = Vex.UI.TickableType.REST;
+		else
+			newType = Vex.UI.TickableType.NOTE; // TODO CHANGE TO BAR
+	} else if (tickable instanceof Vex.Flow.BarNote)
+		newType = Vex.UI.TickableType.NOTE;
+	
+	this.handler.updateProvisoryType(newType);
+	
 };
 
 

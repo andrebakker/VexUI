@@ -95,27 +95,33 @@ Vex.UI.Handler.prototype.drawBeams = function(stave){
 Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 	
 	if(this.provisoryTickable==null){
-		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4"});
-		
+		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4"});		
 	}
-		
+
+	
 	
 	if(this.currentStave!=null){
-		
-		var noteName = NoteMap.getNoteName(this.currentStave, mousePos);
-		if(noteName != this.provisoryTickable.keys[0]){
-			
-			this.provisoryTickable = this.provisoryTickable.clone({keys: [noteName]});
-			if(this.provisoryTickable !== undefined){
-				this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
-			}
-			//Since we have a new note key, update the stem direction
-			this.provisoryTickable.setStemDirection(getStemDirection(this.currentStave, mousePos.y));
-			this.provisoryTickable.setStave(this.currentStave);
-			this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
+		if(!this.provisoryTickable instanceof Vex.Flow.StaveNote || this.provisoryTickable.noteType == "r"){
+			//No need to update key if its not a note or if its a rest, just draw the tickable in the new mouse position
 			
 		}
+		else{
+			var noteName = NoteMap.getNoteName(this.currentStave, mousePos);
+			if(noteName != this.provisoryTickable.keys[0]){
+				
+				this.provisoryTickable = this.provisoryTickable.clone({keys: [noteName]});
+				if(this.provisoryTickable !== undefined){
+					this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
+				}
+				//Since we have a new note key, update the stem direction
+				this.provisoryTickable.setStemDirection(getStemDirection(this.currentStave, mousePos.y));
+				this.provisoryTickable.setStave(this.currentStave);
+				this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
+				
+			}
+		}
 		this.drawProvisoryTickable(mousePos);
+		
 	}
 	
 };
@@ -128,6 +134,29 @@ Vex.UI.Handler.prototype.updateProvisoryDuration = function(newDur){
 	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
 	this.drawProvisoryTickable();
 	
+};
+
+Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
+	var x_shift = this.provisoryTickable.x_shift;
+	
+	switch(newType){
+	case Vex.UI.TickableType.NOTE:
+		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: this.provisoryTickable.duration});
+		break;
+	case Vex.UI.TickableType.REST:
+		//b/4 specifies the vertical position of the rest
+		this.provisoryTickable = new Vex.Flow.StaveNote({ keys: ["b/4"], duration: this.provisoryTickable.duration + "r" });
+		break;
+	case Vex.UI.TickableType.BAR:
+		this.provisoryTickable = new Vex.Flow.BarLine();
+		break;
+	}
+	
+	this.provisoryTickable.x_shift = x_shift;
+	this.provisoryTickable.setStave(this.currentStave);
+	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
+	this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
+	this.drawProvisoryTickable();
 };
 
 Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){

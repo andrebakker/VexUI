@@ -12,3 +12,9 @@ Vex.UI.KeyboardKey = {
 	PAUSE : 80, //P key
 	DOT : 190 //.(>) key 
 };
+
+Vex.UI.TickableType = {
+	NOTE : 0,
+	REST : 1,
+	BAR : 2
+};
