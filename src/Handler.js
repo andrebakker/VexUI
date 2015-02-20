@@ -2,7 +2,7 @@
 /*
  * Vex.UI.Handler: this class is responsible for starting all the events needed for the VexFlow User Interface to work.
  */
-Vex.UI.provisoryNoteStyle = {shadowBlur:0, shadowColor:'gray', fillStyle:'gray', strokeStyle:'gray'}; 
+Vex.UI.provisoryTickableStyle = {shadowBlur:0, shadowColor:'gray', fillStyle:'gray', strokeStyle:'gray'}; 
 Vex.UI.highlightNoteStyle = {shadowBlur:15, shadowColor:'red', fillStyle:'black', strokeStyle:'black'};
 Vex.UI.defaultNoteStyle = {shadowBlur:0, shadowColor:'black', fillStyle:'black', strokeStyle:'black'};
 
@@ -14,8 +14,8 @@ Vex.UI.Handler = function (renderer, canvas, staveList){
 	this.currentNote = null;
 	this.currentStave = null;
 	
-	//Note that will follow the mouse position
-	this.provisoryNote = null;
+	//Tickable that will follow the mouse position
+	this.provisoryTickable = null;
 	
 	this.mouseListener = new Vex.UI.MouseListener(this, this.canvas, this.staveList);
 	this.mouseListener.init();
@@ -94,8 +94,8 @@ Vex.UI.Handler.prototype.drawBeams = function(stave){
 
 Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 	
-	if(this.provisoryNote==null){
-		this.provisoryNote = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4"});
+	if(this.provisoryTickable==null){
+		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4"});
 		
 	}
 		
@@ -103,46 +103,46 @@ Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 	if(this.currentStave!=null){
 		
 		var noteName = NoteMap.getNoteName(this.currentStave, mousePos);
-		if(noteName != this.provisoryNote.keys[0]){
+		if(noteName != this.provisoryTickable.keys[0]){
 			
-			this.provisoryNote = this.provisoryNote.clone({keys: [noteName]});
-			if(this.provisoryNote !== undefined){
-				this.provisoryNote.setStyle(Vex.UI.provisoryNoteStyle);
+			this.provisoryTickable = this.provisoryTickable.clone({keys: [noteName]});
+			if(this.provisoryTickable !== undefined){
+				this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
 			}
 			//Since we have a new note key, update the stem direction
-			this.provisoryNote.setStemDirection(getStemDirection(this.currentStave, mousePos.y));
-			this.provisoryNote.setStave(this.currentStave);
-			this.provisoryNote.setTickContext(new Vex.Flow.TickContext());
+			this.provisoryTickable.setStemDirection(getStemDirection(this.currentStave, mousePos.y));
+			this.provisoryTickable.setStave(this.currentStave);
+			this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
 			
 		}
-		this.drawProvisoryNote(mousePos);
+		this.drawProvisoryTickable(mousePos);
 	}
 	
 };
 
 Vex.UI.Handler.prototype.updateProvisoryDuration = function(newDur){
-	var x_shift = this.provisoryNote.x_shift;
-	this.provisoryNote = this.provisoryNote.clone({duration: newDur});
-	this.provisoryNote.x_shift = x_shift;
-	this.provisoryNote.setStave(this.currentStave);
-	this.provisoryNote.setTickContext(new Vex.Flow.TickContext());
-	this.drawProvisoryNote();
+	var x_shift = this.provisoryTickable.x_shift;
+	this.provisoryTickable = this.provisoryTickable.clone({duration: newDur});
+	this.provisoryTickable.x_shift = x_shift;
+	this.provisoryTickable.setStave(this.currentStave);
+	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
+	this.drawProvisoryTickable();
 	
 };
 
-Vex.UI.Handler.prototype.drawProvisoryNote = function(mousePos){
+Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 	
 	if(this.currentStave!=null){
 		this.redrawStave(this.currentStave);
 		if(mousePos!==undefined){
 			//Fix X position to set exactly where the mouse is
 			//TODO the -5 value shouldnt be absolute! it should reflect half the note's Width
-			this.provisoryNote.x_shift= mousePos.x - this.provisoryNote.getAbsoluteX() - 5;
+			this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
 		}
 		
 		//Only draw Provisory note if not on a definitive note
 		if(this.currentNote==null){
-			this.provisoryNote.draw();
+			this.provisoryTickable.draw();
 		}
 	}
 	

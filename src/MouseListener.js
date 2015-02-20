@@ -156,8 +156,8 @@ Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
 		this.handler.currentNote = newNote;
 		this.handler.currentNote.setHighlight(true);
 		this.handler.redraw();
-	} else if(this.handler.provisoryNote!=null){
-		var dur = this.handler.provisoryNote.duration;
+	} else if(this.handler.provisoryTickable!=null){
+		var dur = this.handler.provisoryTickable.duration;
 		var isAlias = Vex.Flow.durationAliases[dur] !== undefined;
 		if (isAlias){
 			dur = Vex.Flow.durationAliases[dur];
@@ -187,7 +187,7 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 			var nextNote = getLastTickableBeforeXPosition(this.handler.currentStave, mousePos.x);
 			
 			//The provisory Note is now added in the stave list
-			var newNote = this.handler.provisoryNote.clone();
+			var newNote = this.handler.provisoryTickable.clone();
 			//Add the note into the stave
 			this.handler.currentStave.insertTickableBefore(newNote, nextNote);
 			
