@@ -56,7 +56,7 @@ function getLastTickableBeforeXPosition(stave, x){
 	var note = null;
 	
 	for(var i = 0;  i<stave.getTickables().length; i++ ){
-		if(x < stave.getTickables()[i].getBoundingBox().getX())
+		if(x < stave.getTickables()[i].getAbsoluteX())
 			note = stave.getTickables()[i];
 		if(note!=null)
 			break;

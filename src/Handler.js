@@ -75,6 +75,8 @@ Vex.UI.Handler.prototype.drawNotes = function(stave){
 	} else {
 		//Draw notes on Stave passed as Arg
 		var voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4).setMode(Vex.Flow.Voice.Mode.SOFT);
+		// disable strict timing, or else we won't be able to render BarNotes
+		voice.setStrict(false);
 		voice.addTickables(stave.getTickables());
 		
 		var formatter = new Vex.Flow.Formatter();

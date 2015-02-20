@@ -336,6 +336,6 @@ Vex.Flow.Dot.prototype.draw= function() {
 Vex.Flow.BarNote.prototype.clone = function(){
 	var newBarNote = new Vex.Flow.BarNote(this.getType());
 	newBarNote.setStave(this.getStave());
-	newBarNote.setTickContext(new Vex.Flow.TickContext());
+	newBarNote.setTickContext(this.getTickContext());
 	return newBarNote;
 };
