@@ -262,3 +262,9 @@ Vex.UI.NoteMenu.prototype.addBeam = function(){
 	this.handler.beamWithNextNote(this.note);
 	this.close();
 };
+
+
+Vex.UI.NoteMenu.prototype.deleteNote = function(){
+	this.handler.deleteNote(this.note);
+	this.close();
+}

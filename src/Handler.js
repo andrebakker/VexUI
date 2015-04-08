@@ -238,6 +238,18 @@ Vex.UI.Handler.prototype.beamWithNextNote = function(note){
 	}
 };
 
+Vex.UI.Handler.prototype.deleteNote = function(note){
+	for(var i = 0; i < this.staveList.length; i++){
+		var notes = this.staveList[i].getNotes();
+		var referenceIndex = notes.indexOf(note);
+
+		if(referenceIndex > -1){
+			this.staveList[i].removeTickable(note);
+		}
+	}
+	
+}
+
 
 Vex.UI.Handler.prototype.play = function(){	
 	//TODO RPM should be set outside...

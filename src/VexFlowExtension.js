@@ -72,6 +72,10 @@ Vex.Flow.Stave.prototype.replaceTickable = function(oldTickable,newTickable){
 	this.tickables[referenceIndex]=newTickable;
 };
 
+Vex.Flow.Stave.prototype.removeTickable = function(tickable){
+	this.tickables.splice(this.tickables.indexOf(tickable), 1);
+}
+
 Vex.Flow.Stave.prototype.pushTickable = function(newTickable){
 	this.tickables.push(newTickable);
 };
@@ -111,34 +115,44 @@ Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){
 	for(var i = 0; i < this.keys.length; i++){
 		notes.push(MIDI.keyToNote[this.keys[i].replace('/','')]);
 	}
+
+	var keyPressTime = playInfo.defaultTime / this.duration;
+
 	//Set the modifiers for this note (update note value)
 	for (var i = 0; i < this.modifiers.length; i++) {
 		var modifier = this.modifiers[i];
-		var modValue;
-		switch(modifier.type){
-			case "bb":
-			modValue = -2;
-			break;
-			case "b":
-			modValue = -1;
-			break;
-			case "n":
-			modValue = 0;
-			break;
-			case "#":
-			modValue = 1;
-			break;
-			case "##":
-			modValue = 2;
-			break;
-		}
+		if(modifier instanceof Vex.Flow.Accidental){
+			var modValue;
 
-		notes[modifier.index] += modValue;
+			switch(modifier.type){
+				case "bb":
+				modValue = -2;
+				break;
+				case "b":
+				modValue = -1;
+				break;
+				case "n":
+				modValue = 0;
+				break;
+				case "#":
+				modValue = 1;
+				break;
+				case "##":
+				modValue = 2;
+				break;
+			}
+
+			notes[modifier.index] += modValue;
+		}else if(modifier instanceof Vex.Flow.Dot){
+			keyPressTime *= 1.5;
+		}
+		
+
 	};
 
 	//	velocity is set as 127
 	
-	var keyPressTime = playInfo.defaultTime / this.duration;
+	
 	
 	var events = [];
 	
