@@ -111,6 +111,31 @@ Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){
 	for(var i = 0; i < this.keys.length; i++){
 		notes.push(MIDI.keyToNote[this.keys[i].replace('/','')]);
 	}
+	//Set the modifiers for this note (update note value)
+	for (var i = 0; i < this.modifiers.length; i++) {
+		var modifier = this.modifiers[i];
+		var modValue;
+		switch(modifier.type){
+			case "bb":
+			modValue = -2;
+			break;
+			case "b":
+			modValue = -1;
+			break;
+			case "n":
+			modValue = 0;
+			break;
+			case "#":
+			modValue = 1;
+			break;
+			case "##":
+			modValue = 2;
+			break;
+		}
+
+		notes[modifier.index] += modValue;
+	};
+
 	//	velocity is set as 127
 	
 	var keyPressTime = playInfo.defaultTime / this.duration;
@@ -162,11 +187,21 @@ Vex.Flow.StaveNote.prototype.clone = function(newProps){
 	//Setting the style as the same style as the note head
 	newNote.setStyle(this.note_heads[0].style);
 	 
+	
+	
 	if(this.modifierContext!=null && this.getDots()!=null)
 		newNote.addDotToAll();
 	
 	newNote.beam = this.beam;
 	
+	//Clone modifiers
+	for (var i = 0; i < this.modifiers.length; i++) {
+		if(this.modifiers[0] instanceof Vex.Flow.Accidental){
+			newNote.addAccidental(this.modifiers[i].index, new Vex.Flow.Accidental(this.modifiers[i].type));
+		}
+		
+	};
+
 	return newNote;
 };
 
