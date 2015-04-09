@@ -158,18 +158,27 @@ Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
 		this.handler.currentNote.setHighlight(true);
 		this.handler.redraw();
 	} else if(this.handler.provisoryTickable!=null){
-		var dur = this.handler.provisoryTickable.duration;
-		var isAlias = Vex.Flow.durationAliases[dur] !== undefined;
-		if (isAlias){
-			dur = Vex.Flow.durationAliases[dur];
+		if(this.handler.provisoryTickable instanceof Vex.Flow.StaveNote){
+			var dur = this.handler.provisoryTickable.duration;
+			var isAlias = Vex.Flow.durationAliases[dur] !== undefined;
+			if (isAlias){
+				dur = Vex.Flow.durationAliases[dur];
+			}
+			if (delta>0)dur*=2;
+			else dur/=2;
+			
+			if (dur<1) dur = 1;
+			dur = "" + dur; //to string
+			
+			this.handler.updateProvisoryDuration(dur);
+		}else if(this.handler.provisoryTickable instanceof Vex.Flow.BarNote){
+			//See Vex.Flow.Barline.type. Types go from 1 to 6 (7 is Barline.type.NONE).
+			var newType = ((this.handler.provisoryTickable.type + 5 + delta) % 6) + 1;
+			this.handler.provisoryTickable.setType(newType);
+			
+			this.handler.drawProvisoryTickable();
 		}
-		if (delta>0)dur*=2;
-		else dur/=2;
 		
-		if (dur<1) dur = 1;
-		dur = "" + dur; //to string
-		
-		this.handler.updateProvisoryDuration(dur);
 	}
 		
 };
