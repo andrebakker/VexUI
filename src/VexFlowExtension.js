@@ -389,3 +389,34 @@ Vex.Flow.BarNote.prototype.clone = function(){
 	newBarNote.setTickContext(this.getTickContext());
 	return newBarNote;
 };
+
+Vex.Flow.BarNote.prototype.getPlayEvents = function(playInfo, currentEvents){
+	var newEvents = [];
+
+	function markBeginRepeatIndex(){
+		//mark current index as repeating point
+		playInfo.beginRepeatIndex = currentEvents.length + newEvents.length;
+	}
+
+	function addRepeatEvents(){
+		//Add all events since repeat index
+		for(var i = playInfo.beginRepeatIndex || 0; i < currentEvents.length; i++){
+			newEvents.push(currentEvents[i]);
+		}
+	}
+
+	switch(this.type){
+		case Vex.Flow.Barline.type.REPEAT_BEGIN:		
+			markBeginRepeatIndex();
+		break;
+		case Vex.Flow.Barline.type.REPEAT_END:
+			addRepeatEvents();
+		break;
+		case Vex.Flow.Barline.type.REPEAT_BOTH:
+			addRepeatEvents();
+			markBeginRepeatIndex();
+		break;
+	}
+
+	return newEvents;
+}

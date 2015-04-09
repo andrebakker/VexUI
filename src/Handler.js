@@ -260,12 +260,14 @@ Vex.UI.Handler.prototype.play = function(){
 			defaultTime : (rpm / 60) // to seconds
 			};
 	//var script = "MIDI.setVolume(0, 127);";
+	var playEvents = [];
 	for(var i = 0; i < this.staveList.length; i++){
-		var notes = this.staveList[i].getNotes();
-		for(var j = 0; j < notes.length; j++){
-			this.player.addEvents(notes[j].getPlayEvents(playInfo));
+		var tickables = this.staveList[i].getTickables();
+		for(var j = 0; j < tickables.length; j++){
+			playEvents = playEvents.concat(tickables[j].getPlayEvents(playInfo, playEvents));
 		}		
 	}
 	
+	this.player.addEvents(playEvents);
 	this.player.play();
 }
