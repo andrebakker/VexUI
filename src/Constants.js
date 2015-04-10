@@ -16,5 +16,6 @@ Vex.UI.KeyboardKey = {
 Vex.UI.TickableType = {
 	NOTE : 0,
 	REST : 1,
-	BAR : 2
+	BAR : 2,
+	CLEF : 3
 };

@@ -151,6 +151,10 @@ Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
 	case Vex.UI.TickableType.BAR:
 		this.provisoryTickable = new Vex.Flow.BarNote();
 		break;
+	case Vex.UI.TickableType.CLEF:
+		this.provisoryTickable = new Vex.Flow.ClefNote("treble");
+		this.provisoryTickable.clefKey = "treble";
+		break;
 	}
 	this.provisoryTickable.setStave(this.currentStave);
 	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
@@ -172,7 +176,7 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 				this.provisoryTickable.x_shift= mousePos.x - this.provisoryTickable.getAbsoluteX() - 5;
 
 
-			}else if(this.provisoryTickable instanceof Vex.Flow.BarNote){
+			}else{// if(this.provisoryTickable instanceof Vex.Flow.BarNote){
 				this.provisoryTickable.getTickContext().setX(
 						mousePos.x 
 						- this.currentStave.getNoteStartX() 

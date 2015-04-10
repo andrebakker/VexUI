@@ -28,14 +28,55 @@ Vex.Flow.Stave.prototype.getNotes = function() {
 };
 
 Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceTickable) {
+
+	if(newTickable instanceof Vex.Flow.ClefNote){
+		//If the stave has no clef modifiers, then add it. 
+		if(this.getClefModifierIndex() < 0){
+			this.addClef(newTickable.clefKey);
+			return;
+		}
+		//If the stave already has a clef, but the user clicked before any other tickable, then replace the stave clef
+		else if(this.getPreviousTickable(referenceTickable) == null){
+			this.clef = newTickable.clefKey;
+			this.modifiers[this.getClefModifierIndex()] = new Vex.Flow.Clef(newTickable.clefKey);
+			return;
+		}
+		//Else add it as a normal ClefNote as long as the stave already has notes, so leave otherwise
+		else if(this.getNotes().length == 0)
+			return;
+			
+			
+	} else if(newTickable instanceof Vex.Flow.BarNote){
+		//If the BarNote is to be inserted after everything, then modify the end bar of the stave
+		if(referenceTickable == null){
+			this.setEndBarType(newTickable.type);
+			return;
+		}
+		//Else add it as a normal BarNote as long as the stave already has notes, so leave otherwise
+		else if(this.getNotes().length == 0)
+			return;
+	}
+
 	if(referenceTickable==null){
-		this.pushTickable(newTickable);
+			this.pushTickable(newTickable);
 	}else{
 		var referenceIndex = this.tickables.indexOf(referenceTickable);
 		this.tickables.splice(referenceIndex, 0, newTickable);	
 	}
-	
 };
+
+Vex.Flow.Stave.prototype.getClefModifierIndex = function(){
+	//Remove all clefs currently in the stave
+	for(var i = 0; i < this.modifiers.length; i++){
+		var modifier = this.modifiers[i];
+
+		if(modifier instanceof Vex.Flow.Clef)
+			return i;
+
+	}
+	return -1;
+
+}
 
 Vex.Flow.Stave.prototype.getPreviousTickable = function(referenceTickable){
 	var referenceIndex = this.tickables.indexOf(referenceTickable);
@@ -420,3 +461,20 @@ Vex.Flow.BarNote.prototype.getPlayEvents = function(playInfo, currentEvents){
 
 	return newEvents;
 }
+
+/*
+ * ClefNote Extensions
+ */
+
+Vex.Flow.ClefNote.prototype.clone = function (){
+	var newClef = new Vex.Flow.ClefNote(this.clefKey);
+	newClef.clefKey = this.clefKey;
+	newClef.setTickContext(new Vex.Flow.TickContext());
+	newClef.getTickContext().setX(this.getTickContext().getX());
+	return newClef;
+};
+
+
+Vex.Flow.ClefNote.prototype.getPlayEvents = function (playInfo){
+	return [];
+};

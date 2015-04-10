@@ -245,6 +245,8 @@ Vex.UI.MouseListener.prototype.handleMiddleMouseClick = function(evt){
 		else
 			newType = Vex.UI.TickableType.BAR;
 	} else if (tickable instanceof Vex.Flow.BarNote)
+		newType = Vex.UI.TickableType.CLEF;
+	else if(tickable instanceof Vex.Flow.ClefNote)
 		newType = Vex.UI.TickableType.NOTE;
 	
 	this.handler.updateProvisoryType(newType);

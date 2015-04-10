@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <!-- Support Scripts -->
-<script type="text/javascript" src="./lib/vexflow-min.js"></script>
+<script type="text/javascript" src="./lib/vexflow-debug.js"></script>
 <script type="text/javascript" src="./lib/jquery-2.0.0.js"></script>
 <script type="text/javascript" src="./lib/MIDI.min.js"></script>
 <script type="text/javascript" src="./lib/Base64.js"></script>
@@ -55,7 +55,7 @@
 			var staves = [ new Vex.Flow.Stave(10, 0, 600) ];
 
 			var stave = staves[0];
-			stave.addClef("treble").setContext(ctx).draw();
+			stave.setContext(ctx).draw();
 
 			// Create the notes
 			var notes = [ ];
