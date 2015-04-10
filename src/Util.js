@@ -52,11 +52,24 @@ function getLastNoteUsed(stave){
 	return note;
 };
 
-function getLastTickableBeforeXPosition(stave, x){
+function getFirstTickableAfterXPosition(stave, x){
 	var note = null;
 	
 	for(var i = 0;  i<stave.getTickables().length; i++ ){
 		if(x < stave.getTickables()[i].getAbsoluteX())
+			note = stave.getTickables()[i];
+		if(note!=null)
+			break;
+	}
+	
+	return note;
+};
+
+function getLastTickableBeforeXPosition(stave, x){
+	var note = null;
+	
+	for(var i = stave.getTickables().length - 1;  i>=0; i-- ){
+		if(x > stave.getTickables()[i].getAbsoluteX())
 			note = stave.getTickables()[i];
 		if(note!=null)
 			break;

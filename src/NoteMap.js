@@ -26,17 +26,20 @@ Vex.UI.NoteMap.prototype.toNoteName = function(noteArea, stave){
 	
 	var desiredNoteOctave = baseNote.octave - (Math.floor(noteArea / 7));
 	
-	if(stave.clef == 'treble' && (desiredNoteValue == 5 || desiredNoteValue == 6))
+	if( (desiredNoteValue == 5 || desiredNoteValue == 6))
 		desiredNoteOctave--;
 	
 	return this.noteMap[desiredNoteValue] + '/' + desiredNoteOctave;
 };
 
+/**
+  * For now, it seems the easiest way to map notes is to consider them as always in the treble clef.
+  * For playing purposes, we are using Vex.UI.ClefOffsets to find out the correct note.
+  */
 Vex.UI.NoteMap.prototype.getBaseNote = function(stave){
-	switch(stave.clef){
-	case 'treble':
-		return {note:'G', octave: 6}; // represents 4 lines above the treble clef
-	}
+	
+	return {note:'G', octave: 6}; // represents 4 lines above the treble clef
+	
 };
 
 

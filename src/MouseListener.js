@@ -177,8 +177,23 @@ Vex.UI.MouseListener.prototype.handleMouseWheel = function(evt){
 			this.handler.provisoryTickable.setType(newType);
 			
 			this.handler.drawProvisoryTickable();
+		}else if(this.handler.provisoryTickable instanceof Vex.Flow.ClefNote){
+			switch(this.handler.provisoryTickable.clefKey){
+				case "treble":
+					//Switch to bass
+					this.handler.provisoryTickable.clefKey = "bass";
+					this.handler.provisoryTickable.setClef("bass");
+					break;
+				case "bass":
+					//For now, switch back to treble. later, we will use other types of clefs
+					this.handler.provisoryTickable.clefKey = "treble";
+					this.handler.provisoryTickable.setClef("treble");
+			}
+
+
+			this.handler.drawProvisoryTickable();
+			
 		}
-		
 	}
 		
 };
@@ -193,13 +208,14 @@ Vex.UI.MouseListener.prototype.handleLeftMouseClick = function(evt){
 		if(this.handler.currentNote==null){
 			//This case inserts a note into the current stave, based on which position the user clicked
 			
+			var previousNote = getLastTickableBeforeXPosition(this.handler.currentStave, mousePos.x);
 			//Find out the note immediately after the mouse X position
-			var nextNote = getLastTickableBeforeXPosition(this.handler.currentStave, mousePos.x);
+			var nextNote = getFirstTickableAfterXPosition(this.handler.currentStave, mousePos.x);
 			
 			//The provisory Note is now added in the stave list
 			var newNote = this.handler.provisoryTickable.clone();
 			//Add the note into the stave
-			this.handler.currentStave.insertTickableBefore(newNote, nextNote);
+			this.handler.currentStave.insertTickableBetween(newNote, previousNote, nextNote);
 			
 			//Redraw the stave
 			this.handler.redraw();

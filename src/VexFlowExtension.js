@@ -27,7 +27,7 @@ Vex.Flow.Stave.prototype.getNotes = function() {
 	return notes;
 };
 
-Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceTickable) {
+Vex.Flow.Stave.prototype.insertTickableBetween = function(newTickable, previousTickable, nextTickable) {
 
 	if(newTickable instanceof Vex.Flow.ClefNote){
 		//If the stave has no clef modifiers, then add it. 
@@ -36,9 +36,8 @@ Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceT
 			return;
 		}
 		//If the stave already has a clef, but the user clicked before any other tickable, then replace the stave clef
-		else if(this.getPreviousTickable(referenceTickable) == null){
-			this.clef = newTickable.clefKey;
-			this.modifiers[this.getClefModifierIndex()] = new Vex.Flow.Clef(newTickable.clefKey);
+		else if(previousTickable == null){
+			this.replaceClef(newTickable.clefKey);
 			return;
 		}
 		//Else add it as a normal ClefNote as long as the stave already has notes, so leave otherwise
@@ -48,7 +47,7 @@ Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceT
 			
 	} else if(newTickable instanceof Vex.Flow.BarNote){
 		//If the BarNote is to be inserted after everything, then modify the end bar of the stave
-		if(referenceTickable == null){
+		if(nextTickable == null){
 			this.setEndBarType(newTickable.type);
 			return;
 		}
@@ -57,10 +56,10 @@ Vex.Flow.Stave.prototype.insertTickableBefore = function(newTickable, referenceT
 			return;
 	}
 
-	if(referenceTickable==null){
+	if(nextTickable==null){
 			this.pushTickable(newTickable);
 	}else{
-		var referenceIndex = this.tickables.indexOf(referenceTickable);
+		var referenceIndex = this.tickables.indexOf(nextTickable);
 		this.tickables.splice(referenceIndex, 0, newTickable);	
 	}
 };
@@ -76,6 +75,17 @@ Vex.Flow.Stave.prototype.getClefModifierIndex = function(){
 	}
 	return -1;
 
+}
+
+Vex.Flow.Stave.prototype.replaceClef = function(clef){
+	var start_X= this.start_x ;
+	this.clef = clef;
+	var modifier = new Vex.Flow.Clef(clef);
+	this.modifiers.splice(this.getClefModifierIndex(), 1);
+	this.glyphs = [];
+	this.addClef(clef);
+
+	this.start_x = start_X;
 }
 
 Vex.Flow.Stave.prototype.getPreviousTickable = function(referenceTickable){
@@ -156,6 +166,11 @@ Vex.Flow.StaveNote.prototype.getPlayEvents = function(playInfo){
 	for(var i = 0; i < this.keys.length; i++){
 		notes.push(MIDI.keyToNote[this.keys[i].replace('/','')]);
 	}
+
+	//Set clef offset for notes
+	for (var i = 0; i < notes.length; i++) {
+		notes[i] += Vex.UI.ClefOffsets[playInfo.clef];
+	};
 
 	var keyPressTime = playInfo.defaultTime / this.duration;
 
