@@ -167,7 +167,7 @@ Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
 
 Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 	
-	if(this.currentStave!=null){
+	if(this.provisoryTickable && this.currentStave!=null){
 		this.redrawStave(this.currentStave);
 		if(mousePos!==undefined){
 			if(this.provisoryTickable instanceof Vex.Flow.StaveNote){
@@ -266,10 +266,23 @@ Vex.UI.Handler.prototype.play = function(){
 	//var script = "MIDI.setVolume(0, 127);";
 	var playEvents = [];
 	for(var i = 0; i < this.staveList.length; i++){
-		var tickables = this.staveList[i].getTickables();
-		for(var j = 0; j < tickables.length; j++){
-			playEvents = playEvents.concat(tickables[j].getPlayEvents(playInfo, playEvents));
+		var stave = this.staveList[i];
+		//set clef to playinfo
+		playInfo.clef = stave.clef;
+
+		//Call initial barline play events
+		var barNote = new Vex.Flow.BarNote();
+		barNote.setType(stave.modifiers[0].barline);
+		playEvents = playEvents.concat(barNote.getPlayEvents(playInfo, playEvents));
+
+		for(var j = 0; j < stave.getTickables().length; j++){
+			var tickable = stave.getTickables()[j];
+			playEvents = playEvents.concat(tickable.getPlayEvents(playInfo, playEvents));
 		}		
+
+		//Call final barline play events
+		barNote.setType(stave.modifiers[1].barline);
+		playEvents = playEvents.concat(barNote.getPlayEvents(playInfo, playEvents));
 	}
 	
 	this.player.addEvents(playEvents);

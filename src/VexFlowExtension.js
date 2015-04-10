@@ -476,5 +476,7 @@ Vex.Flow.ClefNote.prototype.clone = function (){
 
 
 Vex.Flow.ClefNote.prototype.getPlayEvents = function (playInfo){
+	//update current clef
+	playInfo.clef = this.clefKey;
 	return [];
 };
