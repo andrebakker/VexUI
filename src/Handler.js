@@ -37,10 +37,7 @@ Vex.UI.Handler = function (renderer, canvas, staveList){
 };
 
 Vex.UI.Handler.prototype.init = function() {
-	//Force previous load of the Image by the browser, to avoid erros during menu rendering
-	Vex.UI.NoteMenuButtonRenderer.loadButtonsImage();
-	
-	//Start the MouseListener, which will tell where the mouse is
+	//Start the Listeners
 	this.mouseListener.startListening();
 	this.keyboardListener.startListening();
 };
@@ -186,7 +183,16 @@ Vex.UI.Handler.prototype.drawProvisoryTickable = function(mousePos){
 		}
 		//Only draw Provisory note if not on a definitive note
 		if(this.currentNote==null){
+			var tempFillStyle = this.ctx.fillStyle;
+			var tempStrokeStyle = this.ctx.strokeStyle;
+			this.ctx.fillStyle = 'gray';
+			this.ctx.strokeStyle = 'gray';
+
 			this.provisoryTickable.draw();
+
+			this.ctx.fillStyle = tempFillStyle;
+			this.ctx.strokeStyle = tempStrokeStyle;
+
 		}	
 	}
 	

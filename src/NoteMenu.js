@@ -11,7 +11,7 @@ Vex.UI.NoteMenu = function (handler, canvas, ctx){
 	this.accidentals = ['doubleFlat', 'flat', 'natural', 'sharp', 'doubleSharp'];
 	this.canRender = false;
 	this.currentButton = null;
-	this.buttonRenderer = null;
+	this.buttonRenderer = new Vex.UI.NoteMenuButtonRenderer();
 };
 
 Vex.UI.NoteMenu.prototype.init = function(){
@@ -39,13 +39,17 @@ Vex.UI.NoteMenu.prototype.setTipArea = function() {
 Vex.UI.NoteMenu.prototype.open = function(mousePos){
 	
 	this.panelProps = this.drawMenuPanel(mousePos);
-	this.buttonRenderer = new Vex.UI.NoteMenuButtonRenderer(this.panelProps, this.ctx);
-	//this.buttonRenderer.menuButtonsImg.onload = ;
-	this.drawButtons();
-	this.canvas.addEventListener('mouseup', this, false);
-	this.canvas.addEventListener('mousemove', this, false);
-	this.canvas.addEventListener('contextmenu', this, false);
-	this.setTipArea();
+	this.buttonRenderer.panel = this.panelProps;
+	this.buttonRenderer.context = this.ctx;
+
+	if(this.buttonRenderer.ready){
+		this.drawButtons();
+		this.canvas.addEventListener('mouseup', this, false);
+		this.canvas.addEventListener('mousemove', this, false);
+		this.canvas.addEventListener('contextmenu', this, false);
+		this.setTipArea();	
+	}
+	
 	
 };
 

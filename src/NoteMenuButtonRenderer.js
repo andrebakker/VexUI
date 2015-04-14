@@ -4,15 +4,12 @@
 
 //TODO make the positioning and size of the buttons configurable by parameters.
 Vex.UI.NoteMenuButtonRenderer = function (panel, context){
-	this.panel = panel;
-	this.context = context;
+	this.ready = false;
+	var renderer = this;
+	//Load Resources
 	this.menuButtonsImg = new Image();
-	this.menuButtonsImg.src = '../resources/noteMenuButtons.gif';	
-};
-
-Vex.UI.NoteMenuButtonRenderer.loadButtonsImage = function(){
-	var menuButtonsImg = new Image();
-	menuButtonsImg.src = '../resources/noteMenuButtons.gif';
+	this.menuButtonsImg.src = 'resources/noteMenuButtons.gif';	
+	this.menuButtonsImg.onload = function(){renderer.ready=true};
 };
 
 Vex.UI.NoteMenuButtonRenderer.prototype.closeButton = function (){
@@ -61,9 +58,11 @@ Vex.UI.NoteMenuButtonRenderer.prototype.closeButton = function (){
 Vex.UI.NoteMenuButtonRenderer.prototype.accidentalButton = function (index) {
 	var panelProps = this.panel;
 	var context = this.context;
-
+	var imageObj = this.menuButtonsImg;
+	
+	//Position of each accidental:
+	var positions = [400,100,200,0,300];
 	//Actions of each Accidental
-	var accidentalCodes=['bb', 'b', 'n', '#', '##'];
 	var actions = ['addDoubleFlat', 'addFlat', 'addNatural', 'addSharp', 'addDoubleSharp'];
 	var tips = ['Add double flat to key', 'Add flat to key', 'Add natural to key', 'Add sharp to key', 'Add double sharp to key'];
 
@@ -71,22 +70,21 @@ Vex.UI.NoteMenuButtonRenderer.prototype.accidentalButton = function (index) {
 	var offSetX = 5; // offset between buttons
 	var offSetY = 10;
 
+	//Source Specs
+	var sourceX = positions[index];
+	var sourceY = 0;
+	var sourceWidth = 100;
+	var sourceHeight = 100;
+
 	//Destination Specs
 	var destWidth = 25;
 	var destHeight = destWidth;
 
 	var destX = panelProps.x + initialOffsetX + index * (offSetX + destWidth);
+
 	var destY = panelProps.y + offSetY;
 
-	var centerX = destX + (destWidth/2);
-	var centerY = destY + (destHeight/2);
-	
-	//Code responsible for drawing the accidental button
-	context.strokeStyle="black";
-	context.fillStyle="black";
-	var code = Vex.Flow.accidentalCodes(accidentalCodes[index]).code;
-	var fontScale = 25;
-	Vex.Flow.renderGlyph(context, centerX, centerY,fontScale, code);
+	context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 
 	return new Vex.UI.Button({
 		backgroundColor: 'white',
@@ -100,7 +98,6 @@ Vex.UI.NoteMenuButtonRenderer.prototype.accidentalButton = function (index) {
 		tip: tips[index]
 	});
 };
-
 
 Vex.UI.NoteMenuButtonRenderer.prototype.dotButton = function(){
 	var panelProps = this.panel;
