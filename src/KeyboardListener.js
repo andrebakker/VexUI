@@ -8,10 +8,6 @@ Vex.UI.KeyboardListener = function(handler, canvas, staveList) {
 	this.staveList = staveList;
 };
 
-Vex.UI.KeyboardListener.prototype.init = function(){
-	
-};
-
 Vex.UI.KeyboardListener.prototype.handleEvent = function(evt){
 	switch(evt.type) {
 		case "keydown":

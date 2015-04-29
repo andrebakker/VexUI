@@ -91,6 +91,7 @@ Vex.UI.NoteMenu.prototype.setKeyIndex = function(index){
  * @returns a properties object of the panel.
  */
 Vex.UI.NoteMenu.prototype.drawMenuPanel = function(mousePos) {
+	var canvas = this.canvas;
 	var panelWidth = 200;
 	var panelHeight = 100;
 	var panelX = mousePos.x + 30; // 30 - chosen offset

@@ -26,7 +26,7 @@ Vex.UI.TipRenderer.prototype.init = function(){
 	this.style = 'normal';
 	this.fontSize = 10;
 	this.boundingBox = {x:0,y:0,width:200,height:20};
-	this.context = canvas.getContext('2d');
+	this.context = this.canvas.getContext('2d');
 	this.showingTip = false;
 	this.backgroundColor = 'white';
 };

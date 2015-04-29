@@ -21,6 +21,7 @@
 <script type="text/javascript" src="./src/NoteMenu.js"></script>
 <script type="text/javascript" src="./src/Button.js"></script>
 <script type="text/javascript" src="./src/NoteMenuButtonRenderer.js"></script>
+<script type="text/javascript" src="./src/Toolbar.js"></script>
 <script type="text/javascript" src="./src/TipRenderer.js"></script>
 <script type="text/javascript" src="./src/Player.js"></script>
 
@@ -37,38 +38,11 @@
 </head>
 <body>
 
-	 <canvas id="canvas" width="625" height="160" tabindex="1"></canvas>
-	 <input type="button" value="play" onclick="handler.play();" />
+	 <div id="container"></div>
 	 
 	 <script type="text/javascript">
-	 //Disabling the context menu for canvas
-	 
-	// Get the rendering context
-	
-			var canvas = $('#canvas')[0];
-
-			var renderer = new Vex.Flow.Renderer(canvas,
-					Vex.Flow.Renderer.Backends.CANVAS);
-
-			var ctx = renderer.getContext();
-			
-			var staves = [ new Vex.Flow.Stave(10, 0, 600) ];
-
-			var stave = staves[0];
-			stave.setContext(ctx).draw();
-
-			// Create the notes
-			var notes = [ ];
-			stave.setTickables(notes);
-
-			//stave.modifiers.push(new Vex.Flow.Barline(Vex.Flow.Barline.type.SINGLE, stave.x + 50));
-			
-			// Helper function to justify and draw a 4/4 voice
-			Vex.Flow.Formatter.FormatAndDraw(ctx, stave, notes);
-
 			//INIT The UI
-			var handler = new Vex.UI.Handler(renderer, canvas, staves);
-			handler.init();
+			var handler = new Vex.UI.Handler("container").init();
 		</script>
 </body>
 </html>

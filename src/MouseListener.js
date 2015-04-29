@@ -8,42 +8,6 @@ Vex.UI.MouseListener = function(handler, canvas, staveList) {
 	this.staveList = staveList;
 };
 
-Vex.UI.MouseListener.prototype.init = function(){
-	//TODO Remove code below
-	/*
-	//Draw bounding boxes for the Staves
-	var context = this.canvas.getContext("2d");
-	for(var i = 0; i < this.staveList.length; i++){
-		var box = this.staveList[i].getBoundingBox();
-
-		context.beginPath();
-	    context.rect(box.getX(), box.getY(), box.getW(), box.getH());
-	    context.lineWidth = 7;
-	    context.strokeStyle = 'black';
-	    context.stroke();	
-	}
-	
-	*/
-	
-	
-	//Draw bounding boxes for the Notes
-	/*for(var i = 0; i < this.staveList.length; i++){
-		
-		var noteList = this.staveList[i];
-		
-		for(var j = 0;  j < noteList.length; j ++){
-			var box = this.noteList[i].getBoundingBox();
-
-			context.beginPath();
-			context.rect(box.getX(), box.getY(), box.getW(), box.getH());
-			context.lineWidth = 7;
-			context.strokeStyle = 'yellow';
-			context.stroke();
-	    
-		}
-	}*/
-	
-};
 
 Vex.UI.MouseListener.prototype.handleEvent = function(evt){
 	evt.preventDefault();
@@ -78,7 +42,7 @@ Vex.UI.MouseListener.prototype.stopListening = function(){
 };
 
 Vex.UI.MouseListener.prototype.handleMouseOver = function(evt){
-	var mousePos = getMousePositionInCanvas(canvas, evt);
+	var mousePos = getMousePositionInCanvas(this.canvas, evt);
     this.handler.currentStave = findWhichStaveMouseOver(this.staveList, mousePos);
     this.handler.currentNote = findWhichNoteMouseOver(this.handler.currentStave, mousePos);
     this.handler.updateProvisoryKey(mousePos);

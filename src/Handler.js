@@ -6,22 +6,41 @@ Vex.UI.provisoryTickableStyle = {shadowBlur:0, shadowColor:'gray', fillStyle:'gr
 Vex.UI.highlightNoteStyle = {shadowBlur:15, shadowColor:'red', fillStyle:'black', strokeStyle:'black'};
 Vex.UI.defaultNoteStyle = {shadowBlur:0, shadowColor:'black', fillStyle:'black', strokeStyle:'black'};
 
-Vex.UI.Handler = function (renderer, canvas, staveList){
-	this.renderer = renderer;
+Vex.UI.Handler = function (containerId, options){
+	//Merge options with default options
+	var defaultOptions = {
+		canEdit: true,
+		canPlay: true,
+		showToolbar: true,
+		numberOfStaves: 1,
+		canAddStaves: true,
+		canvasProperties: {
+			id: containerId + "_canvas",
+			width: 625,
+			height: 160,
+			tabindex: 1
+		}
+	};
+
+	this.options = mergeProperties(defaultOptions, options || {});
+
+	this.container = document.getElementById(containerId);
+	this.canvas = this.createCanvas();
+	this.renderer = new Vex.Flow.Renderer(this.canvas, Vex.Flow.Renderer.Backends.CANVAS);
 	this.ctx = this.renderer.getContext();
-	this.canvas = canvas;
-	this.staveList = staveList;
+	this.staveList = this.createStaves();
+
+	if(this.options.showToolbar)
+		this.toolbar = new Vex.UI.Toolbar(this);
+
 	this.currentNote = null;
 	this.currentStave = null;
-	
 	//Tickable that will follow the mouse position
 	this.provisoryTickable = null;
 	
 	this.mouseListener = new Vex.UI.MouseListener(this, this.canvas, this.staveList);
-	this.mouseListener.init();
 	
 	this.keyboardListener = new Vex.UI.KeyboardListener(this, this.canvas, this.staveList);
-	this.keyboardListener.init();
 	
 	this.noteMenu = new Vex.UI.NoteMenu(this, this.canvas, this.ctx);
 	this.noteMenu.init();
@@ -30,16 +49,50 @@ Vex.UI.Handler = function (renderer, canvas, staveList){
 	this.tipRenderer.init();
 	
 	this.player = new Vex.UI.Player(this, this.staveList);
-	
-	
-	
-	
 };
 
+Vex.UI.Handler.prototype.createCanvas = function() {
+	var canvas = document.createElement('canvas');
+	//Attach all properties to element
+	var props = Object.keys(this.options.canvasProperties);
+	for(var i = 0; i<props.length; i++){
+		canvas[props[i]] = this.options.canvasProperties[props[i]];
+	}
+	this.container.appendChild(canvas);
+
+	return canvas;
+};
+
+Vex.UI.Handler.prototype.createStaves = function() {
+	var staveList = [];
+	var yPosition = 0;
+	for(var i = 0; i < this.options.numberOfStaves; i++){
+		//TODO make stave position more dinamic
+		var stave = new Vex.Flow.Stave(10, yPosition , 600);
+		staveList.push(stave);
+		stave.setContext(this.ctx);
+		//Initially empty -> No Notes
+		//TODO make it able to load notes
+		stave.setTickables([]);
+		yPosition += stave.height;
+	}
+
+	return staveList;
+};
+
+
 Vex.UI.Handler.prototype.init = function() {
-	//Start the Listeners
-	this.mouseListener.startListening();
-	this.keyboardListener.startListening();
+	//Draw everything
+	this.redraw();
+
+	if(this.options.canEdit){
+		//Start the Listeners
+		this.mouseListener.startListening();
+		this.keyboardListener.startListening();
+	}
+	
+
+	return this;
 };
 
 Vex.UI.Handler.prototype.redraw = function(){
@@ -261,7 +314,7 @@ Vex.UI.Handler.prototype.deleteNote = function(note){
 }
 
 
-Vex.UI.Handler.prototype.play = function(){	
+Vex.UI.Handler.prototype.play = function(caller){	
 	//TODO RPM should be set outside...
 	var rpm = 120;
 	var playInfo = { 
