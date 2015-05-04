@@ -1,0 +1,150 @@
+@font-face {
+	font-family		: "MusiSync";
+	src				: url("../resources/MusiSync.ttf");
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:url('../resources/icomoon.eot?n6cl9i');
+  src:url('../resources/icomoon.eot?#iefixn6cl9i') format('embedded-opentype'),
+    url('../resources/icomoon.woff?n6cl9i') format('woff'),
+    url('../resources/icomoon.ttf?n6cl9i') format('truetype'),
+    url('../resources/icomoon.svg?n6cl9i#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="musiSync-"], [class*=" musiSync-"] {
+  font-family: 'MusiSync';
+  font-size     : 20pt;
+}
+
+[class^="icomoon-"], [class*=" icomoon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon {
+  position			: relative;
+  display			: inline-block;
+  font-style		: normal;
+  font-weight		: normal;
+  width				: 25px;
+  height 			: 25px;
+  border 			: 1px solid rgb(128,128,128);
+  border-radius		: 4px;
+  background-image  : -moz-linear-gradient(rgb(224,224,224),rgb(160,160,160));
+  background-image  : -ms-linear-gradient(rgb(224,224,224),rgb(160,160,160));
+  background-image  : -o-linear-gradient(rgb(224,224,224),rgb(160,160,160));
+  background-image  : -webkit-linear-gradient(rgb(224,224,224),rgb(160,160,160));
+  background-image  : linear-gradient(rgb(224,224,224),rgb(160,160,160));
+  
+  line-height		: 25px;
+  text-align		: center;
+}
+
+.icon:hover{
+	box-shadow		: 0 0 2px 2px rgba(150,150,255,0.5);
+}
+
+.icon:disabled{
+  background-image  : -moz-linear-gradient(rgb(160,160,160),rgb(224,224,224));
+  background-image  : -ms-linear-gradient(rgb(160,160,160),rgb(224,224,224));
+  background-image  : -o-linear-gradient(rgb(160,160,160),rgb(224,224,224));
+  background-image  : -webkit-linear-gradient(rgb(160,160,160),rgb(224,224,224));
+  background-image  : linear-gradient(rgb(160,160,160),rgb(224,224,224));
+
+}
+
+
+.icomoon-envelop:before {
+  content: "\e945";
+}
+
+.icomoon-floppy-disk:before {
+  content: "\e962";
+}
+
+.icomoon-enlarge:before {
+  content: "\e989";
+}
+
+.icomoon-shrink:before {
+  content: "\e98a";
+}
+
+.icomoon-cogs:before {
+  content: "\e995";
+}
+
+.icomoon-bin:before {
+  content: "\e9ac";
+}
+
+.icomoon-link:before {
+  content: "\e9cb";
+}
+
+.icomoon-warning:before {
+  content: "\ea07";
+}
+
+.icomoon-play:before {
+  content: "\ea1c";
+}
+
+.icomoon-pause:before {
+  content: "\ea1d";
+}
+
+.icomoon-stop:before {
+  content: "\ea1e";
+}
+
+.icomoon-backward:before {
+  content: "\ea1f";
+}
+
+.icomoon-forward:before {
+  content: "\ea20";
+}
+
+.icomoon-first:before {
+  content: "\ea21";
+}
+
+.icomoon-last:before {
+  content: "\ea22";
+}
+
+.icomoon-volume-high:before {
+  content: "\ea26";
+}
+
+.icomoon-volume-medium:before {
+  content: "\ea27";
+}
+
+.icomoon-volume-low:before {
+  content: "\ea28";
+}
+
+.icomoon-volume-mute:before {
+  content: "\ea29";
+}
+
+
+canvas {
+	background 		: #eed;
+	padding			: 10px;
+	border 			: 10px solid #ddc;
+	position		: relative;
+}

@@ -311,10 +311,22 @@ Vex.UI.Handler.prototype.deleteNote = function(note){
 		}
 	}
 	
-}
+};
 
 
-Vex.UI.Handler.prototype.play = function(caller){	
+Vex.UI.Handler.prototype.play = function(){
+
+	var playButton, stopButton;
+
+	if(this.toolbar){
+		playButton = this.toolbar.buttons.play;
+		stopButton = this.toolbar.buttons.stop;
+
+		//enable stop, disable play
+		stopButton.disabled = false;
+		playButton.disabled = true;
+	}
+
 	//TODO RPM should be set outside...
 	var rpm = 120;
 	var playInfo = { 
@@ -345,5 +357,27 @@ Vex.UI.Handler.prototype.play = function(caller){
 	}
 	
 	this.player.addEvents(playEvents);
+	this.player.onPlayFinished(function(){
+		//Reenable play and disable stop
+		if(playButton)
+			playButton.disabled = false;
+		if(stopButton)
+			stopButton.disabled = true;
+	});
 	this.player.play();
-}
+};
+
+Vex.UI.Handler.prototype.stop = function(){
+	if(this.player.stop()){
+		//Stopped Successfully
+		if(this.toolbar){
+			playButton = this.toolbar.buttons.play;
+			stopButton = this.toolbar.buttons.stop;
+
+			//enable stop, disable play
+			playButton.disabled = false;
+			stopButton.disabled = true;
+		}
+	}
+
+};

@@ -8,17 +8,27 @@ Vex.UI.Player = function (handler){
 	this.handler = handler;
 	this.currentTime = 0;
 	this.currentEventIndex = 0;
-	//this.ready = false;
+	this.ready = false;
+	this.loadInstrument("acoustic_grand_piano");
+};
+
+Vex.UI.Player.prototype.loadInstrument = function(instrumentName, onReady){
+	var player = this;
 	//Initialize the player
 	MIDI.loadPlugin({
 		soundfontUrl: "./soundfont/",
-		instrument: "acoustic_grand_piano",
-		callback: function() {
-			//this.ready = true;
+		instrument: instrumentName,
+		callback: function(){
+			player.ready = true;
+			if(onReady)
+				onReady();
 		}
 	});
-};
+}
 
+Vex.UI.Player.prototype.onPlayFinished = function(callback){
+	this.callback = callback;
+}
 
 /**
  * Add functionality to add events manually, instead of using loadFile
@@ -41,8 +51,9 @@ Vex.UI.Player.prototype.addEvents = function(eventList){
 Vex.UI.Player.prototype.play = function(self){
 	if(self === undefined)
 		self = this;
-	if(self.currentEventIndex >= self.events.length)
-		return;//TODO Correctly stop
+	if(self.currentEventIndex >= self.events.length){
+		return self.callback();
+	}
 	
 	var event = self.events[self.currentEventIndex];
 	
@@ -73,16 +84,19 @@ Vex.UI.Player.prototype.play = function(self){
 		
 		//Increment the current event and add current time
 		if(self.currentEventIndex + 1 >= self.events.length)
-			return;
+			return self.callback();
 		var timeUntilNextEvent = self.events[self.currentEventIndex + 1].queuedTime -
 								self.events[self.currentEventIndex].queuedTime;
 		
 		self.currentEventIndex++;
 		self.currentTime += timeUntilNextEvent;
 		
-		setTimeout(self.play, timeUntilNextEvent * 1000, self);
+		self.scheduledId = setTimeout(self.play, timeUntilNextEvent * 1000, self);
 	}
 	
 };
 
-
+Vex.UI.Player.prototype.stop = function(){
+	//TODO Not implemented yet!
+	return false;
+};
