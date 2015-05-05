@@ -7,6 +7,8 @@ Vex.UI.highlightNoteStyle = {shadowBlur:15, shadowColor:'red', fillStyle:'black'
 Vex.UI.defaultNoteStyle = {shadowBlur:0, shadowColor:'black', fillStyle:'black', strokeStyle:'black'};
 
 Vex.UI.Handler = function (containerId, options){
+	this.container = document.getElementById(containerId);
+
 	//Merge options with default options
 	var defaultOptions = {
 		canEdit: true,
@@ -23,8 +25,6 @@ Vex.UI.Handler = function (containerId, options){
 	};
 
 	this.options = mergeProperties(defaultOptions, options || {});
-
-	this.container = document.getElementById(containerId);
 	this.canvas = this.createCanvas();
 	this.renderer = new Vex.Flow.Renderer(this.canvas, Vex.Flow.Renderer.Backends.CANVAS);
 	this.ctx = this.renderer.getContext();
