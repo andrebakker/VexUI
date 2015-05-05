@@ -368,16 +368,15 @@ Vex.UI.Handler.prototype.play = function(){
 };
 
 Vex.UI.Handler.prototype.stop = function(){
-	if(this.player.stop()){
-		//Stopped Successfully
-		if(this.toolbar){
-			playButton = this.toolbar.buttons.play;
-			stopButton = this.toolbar.buttons.stop;
+	this.player.stop();
+		
+	if(this.toolbar){
+		playButton = this.toolbar.buttons.play;
+		stopButton = this.toolbar.buttons.stop;
 
-			//enable stop, disable play
-			playButton.disabled = false;
-			stopButton.disabled = true;
-		}
+		//enable stop, disable play
+		playButton.disabled = false;
+		stopButton.disabled = true;
 	}
 
 };
