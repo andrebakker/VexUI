@@ -18,7 +18,7 @@
   width         : 625px;
 }
 
-[class^="musiSync-"], [class*=" musiSync-"] {
+[class^="musisync-"], [class*=" musisync-"] {
   font-family: 'MusiSync';
   font-size     : 20pt;
 }
@@ -145,6 +145,26 @@
   content: "\ea29";
 }
 
+
+.musisync-wholeNote:before {
+  content: "\0077";
+}
+
+.musisync-halfNote:before {
+  content: "\0068";
+}
+
+.musisync-quarterNote:before {
+  content: "\0071";
+}
+
+.musisync-eightNote:before {
+  content: "\0065";
+}
+
+.musisync-sixteenthNote:before {
+  content: "\0073";
+}
 
 canvas {
 	background 		: #eed;

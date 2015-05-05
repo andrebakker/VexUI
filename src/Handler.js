@@ -13,9 +13,10 @@ Vex.UI.Handler = function (containerId, options){
 	var defaultOptions = {
 		canEdit: true,
 		canPlay: true,
+		canAddStaves: true,
+		canChangeNoteValue: true,
 		showToolbar: true,
 		numberOfStaves: 1,
-		canAddStaves: true,
 		canvasProperties: {
 			id: containerId + "_canvas",
 			width: 625,
