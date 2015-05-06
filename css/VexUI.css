@@ -166,6 +166,26 @@
   content: "\0073";
 }
 
+.musisync-wholeRest:before {
+  content: "\0057";
+}
+
+.musisync-halfRest:before {
+  content: "\0048";
+}
+
+.musisync-quarterRest:before {
+  content: "\0051";
+}
+
+.musisync-eightRest:before {
+  content: "\0045";
+}
+
+.musisync-sixteenthRest:before {
+  content: "\0053";
+}
+
 canvas {
 	background 		: #eed;
 	padding			: 10px;
