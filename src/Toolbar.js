@@ -5,8 +5,8 @@ Vex.UI.Toolbar = function(handler){
 	var opts = this.handler.options;
 
 	if(opts.canChangeNoteValue){
-		var noteValuesGroup = this.createButtonGroup("noteValues");
-		this.buttonGroups.noteValues = noteValuesGroup;
+		var noteValuesGroup = this.createButtonGroup(Vex.UI.TickableType.NOTE);
+		this.buttonGroups[noteValuesGroup.name] = noteValuesGroup;
 
 		this.buttons.wholeNote = noteValuesGroup.appendChild(this.createIcon("wholeNote", "musisync-wholeNote"));
 		this.buttons.halfNote = noteValuesGroup.appendChild(this.createIcon("halfNote", "musisync-halfNote"));
@@ -17,8 +17,8 @@ Vex.UI.Toolbar = function(handler){
 		this.handler.container.appendChild(noteValuesGroup);
 
 
-		var restValuesGroup = this.createButtonGroup("restValues");
-		this.buttonGroups.restValues = restValuesGroup;
+		var restValuesGroup = this.createButtonGroup(Vex.UI.TickableType.REST);
+		this.buttonGroups[restValuesGroup.name] = restValuesGroup;
 
 		this.buttons.wholeRest = restValuesGroup.appendChild(this.createIcon("wholeRest", "musisync-wholeRest"));
 		this.buttons.halfRest = restValuesGroup.appendChild(this.createIcon("halfRest", "musisync-halfRest"));
@@ -27,6 +27,8 @@ Vex.UI.Toolbar = function(handler){
 		this.buttons.sixteenthRest = restValuesGroup.appendChild(this.createIcon("sixteenthRest", "musisync-sixteenthRest"));
 
 		this.handler.container.appendChild(restValuesGroup);
+		//rest group will initially be hidden
+		this.hideGroup(restValuesGroup.name);
 	}
 	if(opts.canPlay){
 		this.buttons.play = this.handler.container.appendChild(this.createIcon("play", "icomoon-play"));
@@ -41,6 +43,13 @@ Vex.UI.Toolbar = function(handler){
 
 
 Vex.UI.Toolbar.prototype.handleEvent = function(evt){
+	if(evt.target.parentNode === this.tickableController){
+		this.hideAllGroups();
+		this.showGroup(evt.target.name);
+		this.handler.updateProvisoryType(evt.target.name);
+	}
+
+
 	switch(evt.target.name){
 		case "play":
 			this.handler.play();
@@ -49,18 +58,23 @@ Vex.UI.Toolbar.prototype.handleEvent = function(evt){
 			this.handler.stop();
 			break;
 		case "wholeNote":
+		case "wholeRest":
 			this.handler.updateProvisoryDuration(1);
 			break;
 		case "halfNote":
+		case "halfRest":
 			this.handler.updateProvisoryDuration(2);
 			break;
 		case "quarterNote":
+		case "quarterRest":
 			this.handler.updateProvisoryDuration(4);
 			break;
 		case "eightNote":
+		case "eightRest":
 			this.handler.updateProvisoryDuration(8);
 			break;
 		case "sixteenthNote":
+		case "sixteenthRest":
 			this.handler.updateProvisoryDuration(16);
 			break;
 	}
@@ -115,8 +129,37 @@ Vex.UI.Toolbar.prototype.createTickableController = function(){
 		icon.innerHTML = group.name;
 	}
 
-	this.buttonGroups.tickableController = tickableController;
+	this.tickableController = tickableController;
 
+	this.updateActiveControllerButton();
 	//prepend the controller before anything
-	this.handler.container.insertBefore(tickableController, this.handler.container.children[0]);
+	this.handler.container.insertBefore(tickableController, this.handler.container.children[1]);
 };
+
+Vex.UI.Toolbar.prototype.hideAllGroups = function(){
+	var groups = Object.keys(this.buttonGroups);
+	for(var i = 0; i<groups.length; i++){
+		this.buttonGroups[groups[i]].style.display = 'none';
+	}
+};
+
+Vex.UI.Toolbar.prototype.showGroup = function(groupName){
+	this.buttonGroups[groupName].style.display = '';
+};
+
+Vex.UI.Toolbar.prototype.hideGroup = function(groupName){
+	this.buttonGroups[groupName].style.display = 'none';
+};
+
+/**
+ * Enable all group buttons but the button that references the current showed group
+ */
+Vex.UI.Toolbar.prototype.updateActiveControllerButton = function(){
+	for(var i = 0; i < this.tickableController.children.length; i++){
+		var button = this.tickableController.children[i];
+		if(this.buttonGroups[button.name].style.display === 'none')
+			button.disabled = false;
+		else
+			button.disabled = true;
+	}
+}

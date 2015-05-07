@@ -180,24 +180,32 @@ Vex.UI.Handler.prototype.updateProvisoryKey = function(mousePos){
 };
 
 Vex.UI.Handler.prototype.updateProvisoryDuration = function(newDur){
-	var x_shift = this.provisoryTickable.x_shift;
+	var x_shift = null;
+	if(this.provisoryTickable)
+		x_shift = this.provisoryTickable.x_shift;
 	this.provisoryTickable = this.provisoryTickable.clone({duration: newDur});
-	this.provisoryTickable.x_shift = x_shift;
-	this.provisoryTickable.setStave(this.currentStave);
+	if(x_shift)
+		this.provisoryTickable.x_shift = x_shift;
+	this.provisoryTickable.setStave(this.currentStave || this.staveList[0]);
 	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
 	this.drawProvisoryTickable();
 	
 };
 
 Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
-	var x_shift = this.provisoryTickable.x_shift;
+	var x_shift = null;
+	if(this.provisoryTickable)
+		x_shift = this.provisoryTickable.x_shift;
 	
 	switch(newType){
 	case Vex.UI.TickableType.NOTE:
 		this.provisoryTickable = new Vex.Flow.StaveNote({keys: ["d/4"], duration: "4" });
 		break;
 	case Vex.UI.TickableType.REST:
-		this.provisoryTickable = new Vex.Flow.StaveNote({ keys: ["b/4"], duration: this.provisoryTickable.duration + "r" });
+		var duration = "4";//TODO make it more configurable, or at least dinamic
+		if(this.provisoryTickable)
+			duration = this.provisoryTickable.duration;
+		this.provisoryTickable = new Vex.Flow.StaveNote({ keys: ["b/4"], duration: duration + "r" });
 		break;
 	case Vex.UI.TickableType.BAR:
 		this.provisoryTickable = new Vex.Flow.BarNote();
@@ -207,11 +215,14 @@ Vex.UI.Handler.prototype.updateProvisoryType = function(newType){
 		this.provisoryTickable.clefKey = "treble";
 		break;
 	}
-	this.provisoryTickable.setStave(this.currentStave);
+	
+	//TODO Maybe this code below shouldn't be here... should we really draw in this method?
+	this.provisoryTickable.setStave(this.currentStave || this.staveList[0]);
 	this.provisoryTickable.setTickContext(new Vex.Flow.TickContext());
 	if(this.provisoryTickable.setStyle !== undefined)
 		this.provisoryTickable.setStyle(Vex.UI.provisoryTickableStyle);
-	this.provisoryTickable.x_shift = x_shift;
+	if(x_shift)
+		this.provisoryTickable.x_shift = x_shift;
 	
 	this.drawProvisoryTickable();
 };
