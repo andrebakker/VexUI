@@ -15,7 +15,9 @@
 }
 
 #container{
+  position: relative;
   width         : 625px;
+  margin: auto;
 }
 
 [class^="musisync-"], [class*=" musisync-"] {
@@ -37,12 +39,12 @@
 }
 
 .icon {
-  position			: relative;
+  float: left;
   display			: inline-block;
   font-style		: normal;
   font-weight		: normal;
-  width				: 25px;
-  height 			: 25px;
+  width				: 30px;
+  height 			: 30px;
   border 			: 1px solid rgb(128,128,128);
   border-radius		: 4px;
   background-image  : -moz-linear-gradient(rgb(224,224,224),rgb(160,160,160));
@@ -66,6 +68,11 @@
   background-image  : -webkit-linear-gradient(rgb(160,160,160),rgb(224,224,224));
   background-image  : linear-gradient(rgb(160,160,160),rgb(224,224,224));
 
+}
+
+.icon-group{
+  width: 40px;
+  text-transform: capitalize;
 }
 
 

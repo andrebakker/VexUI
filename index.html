@@ -27,15 +27,55 @@
 
 <link rel="stylesheet" type="text/css" href="css/VexUI.css">
 
+<style type="text/css">
+	#instructions{
+		margin: 50px auto;
+		padding: 10px;
+		border: 1px solid black;
+		width: 625px;
+	}
+
+</style>
+
 <title>VexUI Tester</title>
 </head>
 <body>
 
+
 	 <div id="container"></div>
+
+	 <section id="instructions">
+	 	<h3>Instructions</h3><br />
+	 	<p>
+	 	Use your mouse to start creating music:
+	 	<ul>
+	 		<li>
+	 			Left-click to insert current music engraving<br />(Left clicking with note selected on an existing note will start a chord);
+	 		</li>
+	 		<li>
+	 			Middle-click to change current engraving type: Cycles through notes, rests, bars, clefs, and back to notes;
+	 		</li>
+	 		<li>
+	 			Scroll Mouse to change notes and rest durations, or bars and clefs types;
+	 		</li>
+	 		<li>
+	 			Right-click on a note to open a menu with some options (ties are still not implemented).
+	 		</li>
+	 		<li>
+				Hit play and listen to your music!
+	 		</li>
+	 	</ul>
+	
+	
+	
+	
+	
+	 	</p>
+	 </section>
 	 
 	 <script type="text/javascript">
-			//INIT The UI
-			var handler = new Vex.UI.Handler("container").init();
-		</script>
+		//INIT The UI
+		var handler = new Vex.UI.Handler("container").init();
+	</script>
 </body>
 </html>

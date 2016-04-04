@@ -4,6 +4,9 @@ Vex.UI.Toolbar = function(handler){
 	this.buttonGroups = {};
 	var opts = this.handler.options;
 
+	var toolbar = document.createElement('div');
+	toolbar.className="toolbar";
+
 	if(opts.canChangeNoteValue){
 		var noteValuesGroup = this.createButtonGroup(Vex.UI.TickableType.NOTE);
 		this.buttonGroups[noteValuesGroup.name] = noteValuesGroup;
@@ -14,7 +17,7 @@ Vex.UI.Toolbar = function(handler){
 		this.buttons.eightNote = noteValuesGroup.appendChild(this.createIcon("eightNote", "musisync-eightNote"));
 		this.buttons.sixteenthNote = noteValuesGroup.appendChild(this.createIcon("sixteenthNote", "musisync-sixteenthNote"));
 
-		this.handler.container.appendChild(noteValuesGroup);
+		toolbar.appendChild(noteValuesGroup);
 
 
 		var restValuesGroup = this.createButtonGroup(Vex.UI.TickableType.REST);
@@ -26,19 +29,23 @@ Vex.UI.Toolbar = function(handler){
 		this.buttons.eightRest = restValuesGroup.appendChild(this.createIcon("eightRest", "musisync-eightRest"));
 		this.buttons.sixteenthRest = restValuesGroup.appendChild(this.createIcon("sixteenthRest", "musisync-sixteenthRest"));
 
-		this.handler.container.appendChild(restValuesGroup);
+		toolbar.appendChild(restValuesGroup);
 		//rest group will initially be hidden
 		this.hideGroup(restValuesGroup.name);
 	}
 	if(opts.canPlay){
-		this.buttons.play = this.handler.container.appendChild(this.createIcon("play", "icomoon-play"));
-		this.buttons.stop = this.handler.container.appendChild(this.createIcon("stop", "icomoon-stop", true));
+		this.buttons.play = toolbar.appendChild(this.createIcon("play", "icomoon-play"));
+		this.buttons.stop = toolbar.appendChild(this.createIcon("stop", "icomoon-stop", true));
 	}
 
 
 
 	//Create a Controller that will manage which part of the toolbar will be shown
 	this.createTickableController();
+
+
+	//Append the toolbar to the container
+	this.handler.container.appendChild(toolbar);
 };
 
 
@@ -127,6 +134,7 @@ Vex.UI.Toolbar.prototype.createTickableController = function(){
 
 		var icon = tickableController.appendChild(this.createIcon(group.name));
 		icon.innerHTML = group.name;
+		icon.className += " icon-group"
 	}
 
 	this.tickableController = tickableController;

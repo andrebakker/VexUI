@@ -1,0 +1,63 @@
+Clefs Font - Windows Version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Summary:
+^^^^^^^^
+This font contains clefs with which you can choose to replace those found in the Petrucci font.  This font is intended for use with Finale 3.5 and later versions.  I have no idea how it works with earlier versions of the programme.  It is designed for use with Windows 3.1 and later.
+
+
+To install this font into Windows 3.1, do the following:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ (1)  Open the Windows Control Panel by double-clicking on its icon.
+	(2)  Open the Fonts panel by double-clicking on its icon.  The font panel will appear.
+	(3)  Click on the Add Fonts button.  The Add Fonts panel will appear.
+	(4)  Choose the appropriate disk drive from the Drives list.
+	(5)  Choose the appropriate directory from the Directories list.
+	(6)  Select Clefs.
+	(7)  Click "OK" to install the font.
+
+To use this font from within Finale, go to Select Default Fonts… from the Options menu.  Within Music Characters, select Clefs, then click on the Set Font… button, and select Clefs from the list which appears.  Finally use the Clef Designer dialog from within the Options menu to select the different clefs.
+
+
+Key Caps Info:
+^^^^^^^^^^^^^^
+Please see the associated CLEFSKCP.TXT for a list of what keys to use to get different clefs.
+
+
+This font is (c) Matthew Hindson, 1996.  Optional shareware donation: $10.  Send cash or cheque to the following address:
+
+
+        |      Clefs Font          | 
+        |       c/- CMCA           |
+        |      PO Box 643          |
+        |    Burwood NSW 2134      |
+        |       AUSTRALIA          |
+
+
+Those users who send $10 will be sent all future upgrades and revisions to this font via e-mail.  However if you don't want to pay the money, that's OK.
+
+
+Comments:
+^^^^^^^^^
+If you would like to comment on this font, 
+        e-mail me: mhindson@mypostbox.com
+        or fax me on: (+61) 2 9744 0337.
+
+
+Distribution:
+^^^^^^^^^^^^^
+You may freely distribute Clefs to whomever you like.  Please distribute this ReadMe and the key caps document along with the font.
+
+
+Also Available:
+^^^^^^^^^^^^^^^
+Tempo Indications Lite - a font with which you can include metronome markings, verbal indications and metric modulations within the one staff expression.
+
+
+Acknowledgements:
+^^^^^^^^^^^^^^^^^
+Thanks to Gary Persons for checking out these fonts for me i.e. whether they work on Windows and on the Windows version of Finale (these fonts were created on a Macintosh using Fontographer 4.1.4).
+
+Clefs Version History:
+^^^^^^^^^^^^^^^^^^^^^^
+v.1.00 - release date 17th December 1996 - initial release for Windows.
