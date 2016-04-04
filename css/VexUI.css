@@ -38,6 +38,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.toolbar{
+  color: black;
+}
+
 .icon {
   float: left;
   display			: inline-block;
@@ -71,7 +75,7 @@
 }
 
 .icon-group{
-  width: 40px;
+  width: 50px;
   text-transform: capitalize;
 }
 
