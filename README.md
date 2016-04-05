@@ -12,7 +12,7 @@ A VexFlow Editor for creating and playing music.
 		var handler = new Vex.UI.Handler("container").init();
 	</script>
 ```
-
+You can see the result [here](http://andrebakker.github.io/VexUI/)
 
 ## Motivation
 
